@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "Flood Alert",
+    "message": "Heavy rain expected. Evacuate to higher ground.",
+    "instructions": [
+      "Move to higher ground immediately",
+      "Avoid walking or driving through flood water",
+      "Turn off electrical mains if safe to do so",
+      "Prepare emergency supplies"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Fire Alert",
+    "message": "Wildfire nearby. Seek shelter immediately.",
+    "instructions": [
+      "Evacuate if instructed by authorities",
+      "Cover nose and mouth to avoid smoke inhalation",
+      "Stay low if smoke is present",
+      "Monitor official emergency updates"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Earthquake Drill",
+    "message": "Simulated earthquake. Drop, cover, and hold on.",
+    "instructions": [
+      "Drop to the ground",
+      "Take cover under sturdy furniture",
+      "Hold on until shaking stops",
+      "Move to an open area after the shaking"
+    ]
+  }
+]

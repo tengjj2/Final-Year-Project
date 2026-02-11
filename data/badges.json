@@ -1,0 +1,37 @@
+[
+  {
+    "id": "Prepared Starter",
+    "name": "Prepared Starter",
+    "description": "Completed your first preparedness task"
+  },
+  {
+    "id": "Flood Aware",
+    "name": "Flood Aware",
+    "description": "Passed the flood safety quiz"
+  },
+  {
+    "id": "Quake Ready",
+    "name": "Quake Ready",
+    "description": "Passed the earthquake preparedness quiz"
+  },
+  {
+    "id": "Fire Smart",
+    "name": "Fire Smart",
+    "description": "Passed the fire safety quiz"
+  },
+  {
+    "id": "Family Planner",
+    "name": "Family Planner",
+    "description": "Created a complete family emergency plan"
+  },
+  {
+    "id": "Safety Checker",
+    "name": "Safety Checker",
+    "description": "Completed a full home safety inspection"
+  },
+  {
+    "id": "Fire Drill Expert",
+    "name": "Fire Drill Expert",
+    "description": "Successfully practiced a fire drill"
+  }
+]

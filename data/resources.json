@@ -1,0 +1,114 @@
+{
+  "emergencyContacts": {
+    "Singapore": [
+      { "name": "Police", "number": "999" },
+      { "name": "SCDF (Fire & Ambulance)", "number": "995" },
+      { "name": "Non-Emergency Ambulance", "number": "1777" }
+    ],
+    "Malaysia": [
+      { "name": "Police", "number": "999" },
+      { "name": "Fire & Rescue", "number": "994" },
+      { "name": "Civil Defence", "number": "991" }
+    ],
+    "USA": [{ "name": "Emergency Services", "number": "911" }],
+    "Japan": [
+      { "name": "Police", "number": "110" },
+      { "name": "Fire & Ambulance", "number": "119" }
+    ]
+  },
+
+  "shelters": {
+    "Singapore": [
+      {
+        "id": "sg-1",
+        "name": "Community Centre Shelter",
+        "address": "Ang Mo Kio Community Centre, 795 Ang Mo Kio Ave 1, Singapore"
+      },
+      {
+        "id": "sg-2",
+        "name": "School Emergency Shelter",
+        "address": "Anderson Secondary School, 1 Ang Mo Kio Street 64, Singapore"
+      },
+      {
+        "id": "sg-3",
+        "name": "Civil Defence Shelter",
+        "address": "SCDF HQ, 91 Ubi Avenue 4, Singapore"
+      }
+    ],
+    "Malaysia": [
+      {
+        "id": "my-1",
+        "name": "National Disaster Relief Centre",
+        "address": "NADMA Malaysia, Prime Minister's Department, Putrajaya"
+      },
+      {
+        "id": "my-2",
+        "name": "Community Hall Shelter",
+        "address": "Dewan Serbaguna Taman Tun Dr Ismail, Kuala Lumpur"
+      }
+    ],
+    "USA": [
+      {
+        "id": "us-1",
+        "name": "Red Cross Emergency Shelter",
+        "address": "American Red Cross, Los Angeles, CA"
+      },
+      {
+        "id": "us-2",
+        "name": "City Community Shelter",
+        "address": "NYC Emergency Management, 165 Cadman Plaza E, Brooklyn, NY"
+      }
+    ],
+    "Japan": [
+      {
+        "id": "jp-1",
+        "name": "Municipal Evacuation Center",
+        "address": "Shinjuku City Office, 1 Chome-4-1 Kabukicho, Tokyo"
+      },
+      {
+        "id": "jp-2",
+        "name": "School Evacuation Shelter",
+        "address": "Tokyo Metropolitan High School, Tokyo"
+      }
+    ]
+  },
+
+  "safetyTips": [
+    {
+      "id": 1,
+      "title": "Flood Safety",
+      "tips": [
+        "Move to higher ground immediately.",
+        "Avoid walking or driving through floodwaters.",
+        "Turn off electricity at the main switch if safe to do so."
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Fire Safety",
+      "tips": [
+        "Stay low to avoid smoke inhalation.",
+        "Check doors for heat before opening.",
+        "Use stairs instead of elevators."
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Earthquake Safety",
+      "tips": [
+        "Drop, cover, and hold on.",
+        "Stay away from windows and heavy furniture.",
+        "Move to open areas after shaking stops."
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Heatwave Safety",
+      "tips": [
+        "Drink plenty of water.",
+        "Avoid outdoor activities during peak heat hours.",
+        "Check on elderly family members."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+[
+  {
+    "id": 1,
+    "type": "task",
+    "title": "Build an Emergency Kit",
+    "description": "Identify essential items for an emergency kit",
+    "points": 20,
+    "badge": "Prepared Starter",
+    "items": [
+      "Bottled water",
+      "Non-perishable food",
+      "Flashlight",
+      "First-aid kit",
+      "Battery-powered radio",
+      "Extra batteries"
+    ]
+  },
+  {
+    "id": 2,
+    "type": "task",
+    "title": "Create a Family Emergency Plan",
+    "description": "Plan how your family will communicate and meet during an emergency",
+    "points": 25,
+    "badge": "Family Planner",
+    "items": [
+      "Choose a meeting point",
+      "List emergency contacts",
+      "Establish communication plan",
+      "Assign responsibilities to each member"
+    ]
+  },
+  {
+    "id": 3,
+    "type": "task",
+    "title": "Check Home Safety",
+    "description": "Ensure your home is safe and disaster-ready",
+    "points": 15,
+    "badge": "Safety Checker",
+    "items": [
+      "Secure heavy furniture",
+      "Check smoke alarms",
+      "Inspect electrical wiring",
+      "Know gas shutoff locations"
+    ]
+  },
+  {
+    "id": 4,
+    "type": "task",
+    "title": "Fire Drill Practice",
+    "description": "Practice a fire escape route at home",
+    "points": 10,
+    "badge": "Fire Drill Expert",
+    "items": [
+      "Identify all exits",
+      "Practice evacuation",
+      "Review meeting point",
+      "Check fire extinguisher location"
+    ]
+  }
+]
