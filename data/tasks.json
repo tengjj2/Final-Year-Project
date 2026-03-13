@@ -1,60 +1,381 @@
 [
+  /* GENERAL */
   {
     "id": 1,
     "type": "task",
-    "title": "Build an Emergency Kit",
-    "description": "Identify essential items for an emergency kit",
-    "points": 20,
-    "badge": "Prepared Starter",
+    "category": "general",
+    "taskType": "reading",
+    "title": "Introduction to Emergency Preparedness",
+    "description": "Learn why being prepared is important for all types of emergencies.",
+    "points": 10,
+    "content": "Disasters can happen at any time. Being prepared saves lives. You should have an emergency kit, a communication plan, and know evacuation routes."
+  },
+  {
+    "id": 2,
+    "type": "task",
+    "category": "general",
+    "taskType": "checklist",
+    "title": "Build Your Emergency Kit",
+    "description": "Select essential items that should be included in a disaster kit.",
+    "points": 10,
     "items": [
       "Bottled water",
       "Non-perishable food",
       "Flashlight",
       "First-aid kit",
       "Battery-powered radio",
-      "Extra batteries"
-    ]
-  },
-  {
-    "id": 2,
-    "type": "task",
-    "title": "Create a Family Emergency Plan",
-    "description": "Plan how your family will communicate and meet during an emergency",
-    "points": 25,
-    "badge": "Family Planner",
-    "items": [
-      "Choose a meeting point",
-      "List emergency contacts",
-      "Establish communication plan",
-      "Assign responsibilities to each member"
+      "Extra batteries",
+      "Important documents"
     ]
   },
   {
     "id": 3,
     "type": "task",
-    "title": "Check Home Safety",
-    "description": "Ensure your home is safe and disaster-ready",
-    "points": 15,
-    "badge": "Safety Checker",
-    "items": [
-      "Secure heavy furniture",
-      "Check smoke alarms",
-      "Inspect electrical wiring",
-      "Know gas shutoff locations"
+    "category": "general",
+    "taskType": "scenario",
+    "title": "Create a Family Emergency Plan",
+    "description": "Plan for communication and evacuation during a disaster.",
+    "points": 10,
+    "story": "Your family is at home and a disaster strikes. What should you do first?",
+    "questions": [
+      {
+        "options": [
+          "Call each family member individually",
+          "Go to the pre-decided meeting point",
+          "Panic and look for your neighbors"
+        ],
+        "answer": "Go to the pre-decided meeting point"
+      }
     ]
   },
+
+  /* FIRE */
   {
     "id": 4,
     "type": "task",
-    "title": "Fire Drill Practice",
-    "description": "Practice a fire escape route at home",
+    "category": "fire",
+    "taskType": "reading",
+    "title": "Fire Prevention & Safety Tips",
+    "description": "Learn how to reduce fire risks at home.",
     "points": 10,
-    "badge": "Fire Drill Expert",
+    "content": "Keep flammable items away from heat sources, never leave cooking unattended, maintain clear exits, and test smoke alarms monthly."
+  },
+  {
+    "id": 5,
+    "type": "task",
+    "category": "fire",
+    "taskType": "checklist",
+    "title": "Home Fire Safety Check",
+    "description": "Inspect your home for fire hazards and ensure safety equipment is ready.",
+    "points": 10,
     "items": [
-      "Identify all exits",
-      "Practice evacuation",
-      "Review meeting point",
-      "Check fire extinguisher location"
+      "Check smoke alarms are functional",
+      "Inspect electrical sockets for damage",
+      "Identify all fire exits",
+      "Locate fire extinguisher"
+    ]
+  },
+  {
+    "id": 6,
+    "type": "task",
+    "category": "fire",
+    "taskType": "scenario",
+    "title": "Fire Drill Simulation",
+    "description": "Simulate a fire in your home and make the correct decisions.",
+    "points": 10,
+    "story": "You smell smoke and see flames in the kitchen. Which is the safest immediate action?",
+    "questions": [
+      {
+        "options": [
+          "Use the elevator to escape",
+          "Stay calm, use stairs, and evacuate",
+          "Grab valuables before leaving"
+        ],
+        "answer": "Stay calm, use stairs, and evacuate"
+      }
+    ]
+  },
+
+  /* EARTHQUAKE */
+  {
+    "id": 7,
+    "type": "task",
+    "category": "earthquake",
+    "taskType": "reading",
+    "title": "Secure Your Home Against Earthquakes",
+    "description": "Learn how to reduce damage and injuries during an earthquake.",
+    "points": 10,
+    "content": "Anchor heavy furniture to walls, secure appliances, store fragile items safely, and have a family meeting point outside."
+  },
+  {
+    "id": 8,
+    "type": "task",
+    "category": "earthquake",
+    "taskType": "checklist",
+    "title": "Earthquake Safety Drill",
+    "description": "Practice Drop, Cover, and Hold On technique.",
+    "points": 10,
+    "items": [
+      "Identify safe spots in each room",
+      "Practice ducking under a sturdy table",
+      "Protect your head and neck",
+      "Stay indoors until shaking stops"
+    ]
+  },
+  {
+    "id": 9,
+    "type": "task",
+    "category": "earthquake",
+    "taskType": "scenario",
+    "title": "Earthquake Decision Making",
+    "description": "Answer a scenario based on correct earthquake safety practices.",
+    "points": 10,
+    "story": "During an earthquake, you are in a kitchen with hanging cabinets. What is the safest action?",
+    "questions": [
+      {
+        "options": [
+          "Stand under the cabinets to stay safe",
+          "Move to the center of the room",
+          "Drop, cover under sturdy furniture, and hold on"
+        ],
+        "answer": "Drop, cover under sturdy furniture, and hold on"
+      }
+    ]
+  },
+
+  /* FLOOD */
+  {
+    "id": 10,
+    "type": "task",
+    "category": "flood",
+    "taskType": "reading",
+    "title": "Water Safety During Floods",
+    "description": "Learn how to secure and purify water during flooding.",
+    "points": 10,
+    "content": "Store clean water safely, set up simple filtration, boil before drinking, and avoid contact with contaminated water."
+  },
+  {
+    "id": 11,
+    "type": "task",
+    "category": "flood",
+    "taskType": "checklist",
+    "title": "Flood Preparedness Steps",
+    "description": "Prepare essential items and plan for flooding.",
+    "points": 10,
+    "items": [
+      "Know higher ground locations",
+      "Prepare waterproof emergency kit",
+      "Keep important documents dry",
+      "Avoid driving through flooded areas"
+    ]
+  },
+  {
+    "id": 12,
+    "type": "task",
+    "category": "flood",
+    "taskType": "scenario",
+    "title": "Flash Flood Emergency",
+    "description": "Simulate a sudden flash flood and make the correct decision.",
+    "points": 10,
+    "story": "Heavy rain causes sudden flooding. You are in a car on a submerged road. What do you do?",
+    "questions": [
+      {
+        "options": [
+          "Drive slowly through the water",
+          "Abandon the car and move to higher ground",
+          "Wait in the car until water recedes"
+        ],
+        "answer": "Abandon the car and move to higher ground"
+      }
+    ]
+  },
+
+  /* TYPHOON */
+  {
+    "id": 13,
+    "type": "task",
+    "category": "typhoon",
+    "taskType": "reading",
+    "title": "Typhoon Preparedness Basics",
+    "description": "Learn how to prepare for a typhoon.",
+    "points": 10,
+    "content": "Secure loose items outside, check drainage, stock up on essentials, and know your evacuation routes."
+  },
+  {
+    "id": 14,
+    "type": "task",
+    "category": "typhoon",
+    "taskType": "checklist",
+    "title": "Typhoon Safety Checklist",
+    "description": "Select essential actions to take before a typhoon.",
+    "points": 10,
+    "items": [
+      "Check windows and doors",
+      "Secure outdoor items",
+      "Charge phones and backup power",
+      "Prepare emergency kit",
+      "Stay updated with weather alerts"
+    ]
+  },
+  {
+    "id": 15,
+    "type": "task",
+    "category": "typhoon",
+    "taskType": "scenario",
+    "title": "Typhoon Emergency Decision",
+    "description": "Decide what to do during a typhoon scenario.",
+    "points": 10,
+    "story": "A typhoon warning is issued and heavy rain begins. What is your safest action?",
+    "questions": [
+      {
+        "options": [
+          "Go outside to check flooding",
+          "Stay indoors and follow evacuation plans",
+          "Ignore warnings and continue activities"
+        ],
+        "answer": "Stay indoors and follow evacuation plans"
+      }
+    ]
+  },
+
+  /* WILDFIRE */
+  {
+    "id": 16,
+    "type": "task",
+    "category": "wildfire",
+    "taskType": "reading",
+    "title": "Wildfire Safety Tips",
+    "description": "Learn how to reduce wildfire risk and stay safe.",
+    "points": 10,
+    "content": "Clear dry leaves, maintain defensible space, keep fire extinguishers ready, and have an evacuation plan."
+  },
+  {
+    "id": 17,
+    "type": "task",
+    "category": "wildfire",
+    "taskType": "checklist",
+    "title": "Wildfire Preparedness Checklist",
+    "description": "Select essential wildfire precautions.",
+    "points": 10,
+    "items": [
+      "Remove flammable debris around home",
+      "Check fire alarms and extinguishers",
+      "Plan evacuation route",
+      "Keep emergency kit ready"
+    ]
+  },
+  {
+    "id": 18,
+    "type": "task",
+    "category": "wildfire",
+    "taskType": "scenario",
+    "title": "Wildfire Response Scenario",
+    "description": "Respond to a wildfire threat safely.",
+    "points": 10,
+    "story": "Smoke is visible near your neighborhood and air quality is deteriorating. What should you do first?",
+    "questions": [
+      {
+        "options": [
+          "Continue outdoor activities",
+          "Evacuate or shelter indoors following official instructions",
+          "Ignore smoke and wait"
+        ],
+        "answer": "Evacuate or shelter indoors following official instructions"
+      }
+    ]
+  },
+
+  /* POWER OUTAGE */
+  {
+    "id": 19,
+    "type": "task",
+    "category": "power",
+    "taskType": "reading",
+    "title": "Power Outage Preparedness",
+    "description": "Learn how to handle electricity interruptions safely.",
+    "points": 10,
+    "content": "Keep flashlights and batteries ready, unplug appliances, know emergency numbers, and have backup power if possible."
+  },
+  {
+    "id": 20,
+    "type": "task",
+    "category": "power",
+    "taskType": "checklist",
+    "title": "Power Outage Safety Checklist",
+    "description": "Essential actions during a power outage.",
+    "points": 10,
+    "items": [
+      "Have working flashlight",
+      "Unplug sensitive electronics",
+      "Keep refrigerator/freezer closed",
+      "Check emergency generator if available"
+    ]
+  },
+  {
+    "id": 21,
+    "type": "task",
+    "category": "power",
+    "taskType": "scenario",
+    "title": "Power Outage Scenario",
+    "description": "Respond to a sudden blackout safely.",
+    "points": 10,
+    "story": "The power goes out during a storm at night. What is your safest course of action?",
+    "questions": [
+      {
+        "options": [
+          "Use candles near flammable items",
+          "Use flashlights and stay calm",
+          "Try to restart the power immediately"
+        ],
+        "answer": "Use flashlights and stay calm"
+      }
+    ]
+  },
+
+  /* HAZE */
+  {
+    "id": 22,
+    "type": "task",
+    "category": "haze",
+    "taskType": "reading",
+    "title": "Haze Precautions",
+    "description": "Learn how to protect yourself during haze conditions.",
+    "points": 10,
+    "content": "Stay indoors, keep windows closed, use air purifiers, and wear masks if going outside."
+  },
+  {
+    "id": 23,
+    "type": "task",
+    "category": "haze",
+    "taskType": "checklist",
+    "title": "Haze Safety Checklist",
+    "description": "Select actions to reduce haze exposure.",
+    "points": 10,
+    "items": [
+      "Keep windows closed",
+      "Wear a mask outdoors",
+      "Use air purifier indoors",
+      "Limit outdoor activities"
+    ]
+  },
+  {
+    "id": 24,
+    "type": "task",
+    "category": "haze",
+    "taskType": "scenario",
+    "title": "Haze Emergency Scenario",
+    "description": "Make decisions to protect yourself during severe haze.",
+    "points": 10,
+    "story": "Air pollution rises and haze levels are hazardous. What should you do?",
+    "questions": [
+      {
+        "options": [
+          "Go jogging outside",
+          "Stay indoors and follow safety guidelines",
+          "Ignore haze warnings"
+        ],
+        "answer": "Stay indoors and follow safety guidelines"
+      }
     ]
   }
 ]

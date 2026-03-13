@@ -1,7 +1,6 @@
 // helpers/emergencyHelper.js
 
-// Import static data (JSON files)
-import emergencies from "../data/emergencies.json";
+// Import resources JSON
 import resources from "../data/resources.json";
 
 // In-memory variable to store the currently active emergency
@@ -9,7 +8,6 @@ let currentEmergency = null;
 
 /**
  * Simulates sending a notification to the user
- * Also stores the selected emergency in memory
  */
 export function sendNotification(emergency) {
   currentEmergency = emergency;
@@ -18,7 +16,6 @@ export function sendNotification(emergency) {
 
 /**
  * Returns the currently active emergency
- * Used by HomeScreen and EmergencyMode screen
  */
 export function getCurrentEmergency() {
   return currentEmergency;
@@ -32,17 +29,19 @@ export function clearCurrentEmergency() {
 }
 
 /**
- * Returns a random emergency from emergencies.json
- * Used to simulate real-life emergency alerts
+ * Returns a random emergency from resources.json
  */
 export function getRandomEmergency() {
-  if (!emergencies || emergencies.length === 0) return null;
+  const emergencies = resources.disasterInfo || [];
+
+  if (emergencies.length === 0) return null;
+
   const index = Math.floor(Math.random() * emergencies.length);
   return emergencies[index];
 }
 
 /**
- * Returns step-by-step instructions for a given emergency
+ * Returns step-by-step instructions
  */
 export function getEmergencyInstructions(emergency) {
   if (!emergency || !Array.isArray(emergency.instructions)) return [];

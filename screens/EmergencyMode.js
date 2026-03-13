@@ -1,14 +1,10 @@
 // screens/EmergencyMode.js
 
-// React hooks
 import { useState, useCallback } from "react";
-
-// React Native components
 import {
   View,
   Text,
   StyleSheet,
-  Button,
   Alert,
   ActivityIndicator,
   Modal,
@@ -16,14 +12,10 @@ import {
   ScrollView,
   Linking,
 } from "react-native";
-
-// Dropdown picker component
 import { Picker } from "@react-native-picker/picker";
-
-// Navigation hook to run logic when screen comes into focus
 import { useFocusEffect } from "@react-navigation/native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-// Helpers
 import {
   sendNotification,
   getCurrentEmergency,
@@ -35,50 +27,43 @@ import {
 import { getDeviceCountry } from "../helpers/locationHelper";
 
 export default function EmergencyMode() {
-  // Component state
   const [deviceCountry, setDeviceCountry] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [loadingLocation, setLoadingLocation] = useState(true);
   const [locationTimeout, setLocationTimeout] = useState(false);
   const [currentAlert, setCurrentAlert] = useState(getCurrentEmergency());
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContacts, setModalContacts] = useState([]);
+  const allowedCountries = ["Singapore", "England", "Japan"];
 
-  // Fetch device location
-  // Runs everytime the screen comes into focus
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-
       const fetchLocation = async () => {
         setLoadingLocation(true);
         setLocationTimeout(false);
 
-        const country = await getDeviceCountry(10000); // Timeout 10s
+        const country = await getDeviceCountry(10000);
         if (!isActive) return;
 
-        if (country) {
-          setDeviceCountry(country);
-        } else {
+        if (country) setDeviceCountry(country);
+        else {
           setDeviceCountry(null);
           setLocationTimeout(true);
         }
 
         setLoadingLocation(false);
       };
-
       fetchLocation();
       return () => {
-        isActive = false; // Clean up if component unmounts
+        isActive = false;
       };
     }, []),
   );
 
-  // Simulate emergency
   const simulateEmergency = () => {
     const country = deviceCountry || selectedCountry;
-    if (!country) {
+    if (!country || !allowedCountries.includes(country)) {
       Alert.alert(
         "No location selected",
         "Please enable location or select your country.",
@@ -98,20 +83,18 @@ export default function EmergencyMode() {
     setCurrentAlert(emergency);
   };
 
-  // Clear emergency
   const clearEmergency = () => {
     clearCurrentEmergency();
     setCurrentAlert(null);
     Alert.alert("Emergency cleared", "There are no active emergencies now.");
   };
 
-  // Emergency contacts modal
   const openEmergencyModal = () => {
     const country = deviceCountry || selectedCountry;
-    if (!country) {
+    if (!country || !allowedCountries.includes(country)) {
       Alert.alert(
-        "No country selected",
-        "Please enable location or select your country first.",
+        "No location selected",
+        "Please enable location or select your country.",
       );
       return;
     }
@@ -129,7 +112,6 @@ export default function EmergencyMode() {
     setModalVisible(true);
   };
 
-  // Call number in device dialer
   const callNumber = (number) => {
     Linking.openURL(`tel:${number}`);
     setModalVisible(false);
@@ -137,14 +119,12 @@ export default function EmergencyMode() {
 
   const country = deviceCountry || selectedCountry;
 
-  // UI Component
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Current Emergency */}
       {currentAlert && (
         <View style={styles.alertBox}>
           <Text style={styles.emergencyHeader}>EMERGENCY MODE</Text>
-
           <Text style={styles.alertTitle}>{currentAlert.title}</Text>
           <Text style={styles.alertMessage}>{currentAlert.message}</Text>
 
@@ -159,11 +139,22 @@ export default function EmergencyMode() {
         </View>
       )}
 
+      {/* No Emergency Status Card */}
+      {!currentAlert && (
+        <View style={styles.noAlertBox}>
+          <Ionicons name="shield-checkmark" size={40} color="#0f8f84" />
+          <Text style={styles.noAlertTitle}>No Active Emergencies</Text>
+          <Text style={styles.noAlertText}>
+            Everything is currently safe. You can simulate an emergency to
+            practice your response.
+          </Text>
+        </View>
+      )}
+
       {/* Location Display */}
       <Text style={styles.subtitle}>Detected Location:</Text>
-
       {loadingLocation ? (
-        <ActivityIndicator size="small" color="#2e86de" />
+        <ActivityIndicator size="small" color="#0f8f84" />
       ) : deviceCountry ? (
         <Text style={styles.locationText}>{deviceCountry}</Text>
       ) : (
@@ -173,46 +164,47 @@ export default function EmergencyMode() {
               ? "Can't find your location, select your country"
               : "No location detected"}
           </Text>
-
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={selectedCountry}
               onValueChange={setSelectedCountry}
             >
               <Picker.Item label="Select country" value="" />
-              <Picker.Item label="Singapore" value="Singapore" />
-              <Picker.Item label="Malaysia" value="Malaysia" />
-              <Picker.Item label="USA" value="USA" />
-              <Picker.Item label="Japan" value="Japan" />
+              {allowedCountries.map((c) => (
+                <Picker.Item key={c} label={c} value={c} />
+              ))}
             </Picker>
           </View>
         </>
       )}
 
-      {/* Action Buttons*/}
-      <View style={styles.buttonGroup}>
-        <Button
-          title="Simulate Emergency"
-          onPress={simulateEmergency}
-          color="#c0392b"
-        />
-      </View>
+      {/* Action Buttons */}
+      <TouchableOpacity style={styles.actionButton} onPress={simulateEmergency}>
+        <View style={styles.buttonRow}>
+          <Ionicons name="alert-circle" size={20} color="#fff" />
+          <Text style={styles.buttonText}>Simulate Emergency</Text>
+        </View>
+      </TouchableOpacity>
 
-      <View style={styles.buttonGroup}>
-        <Button
-          title="Clear Emergency"
-          onPress={clearEmergency}
-          color="#7f8c8d"
-        />
-      </View>
+      <TouchableOpacity
+        style={[styles.actionButton, { backgroundColor: "#636e72" }]}
+        onPress={clearEmergency}
+      >
+        <View style={styles.buttonRow}>
+          <Ionicons name="checkmark-circle" size={20} color="#fff" />
+          <Text style={styles.buttonText}>Clear Emergency</Text>
+        </View>
+      </TouchableOpacity>
 
-      <View style={styles.buttonGroup}>
-        <Button
-          title="Call Emergency Services"
-          onPress={openEmergencyModal}
-          color="#d35400"
-        />
-      </View>
+      <TouchableOpacity
+        style={[styles.actionButton, { backgroundColor: "#d35400" }]}
+        onPress={openEmergencyModal}
+      >
+        <View style={styles.buttonRow}>
+          <Ionicons name="call" size={20} color="#fff" />
+          <Text style={styles.buttonText}>Call Emergency Services</Text>
+        </View>
+      </TouchableOpacity>
 
       {/* Emergency Contacts Modal */}
       <Modal
@@ -226,7 +218,6 @@ export default function EmergencyMode() {
             <Text style={styles.modalTitle}>
               Emergency Contacts for {country}
             </Text>
-
             <ScrollView style={{ maxHeight: 250 }}>
               {modalContacts.map((contact, idx) => (
                 <TouchableOpacity
@@ -240,12 +231,12 @@ export default function EmergencyMode() {
                 </TouchableOpacity>
               ))}
             </ScrollView>
-
-            <Button
-              title="Close"
+            <TouchableOpacity
+              style={[styles.actionButton, { marginTop: 10 }]}
               onPress={() => setModalVisible(false)}
-              color="#7f8c8d"
-            />
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -256,58 +247,79 @@ export default function EmergencyMode() {
 // Styles
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     padding: 20,
+    backgroundColor: "#f5f6fa",
   },
 
-  /* Emergency Section */
-  emergencyHeader: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#ffffff",
-    textAlign: "center",
-    marginBottom: 10,
-    letterSpacing: 1.5,
-  },
-
+  /* Emergency Alert */
   alertBox: {
     padding: 20,
     marginBottom: 25,
     backgroundColor: "#c0392b",
-    borderRadius: 12,
+    borderRadius: 16,
+    elevation: 3,
   },
-
+  emergencyHeader: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+    marginBottom: 10,
+    letterSpacing: 1.2,
+  },
   alertTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#fff",
     textAlign: "center",
     marginBottom: 6,
   },
-
   alertMessage: {
     fontSize: 16,
-    color: "#ffffff",
+    color: "#fff",
     textAlign: "center",
   },
-
   instructionsBox: {
     marginTop: 15,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: "rgba(255,255,255,0.4)",
   },
-
   instructionsTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#fff",
     marginBottom: 8,
   },
-
   instructionItem: {
     fontSize: 14,
-    color: "#ffffff",
+    color: "#fff",
     marginBottom: 6,
+  },
+
+  /* No Emergency Card */
+  noAlertBox: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 25,
+    alignItems: "center",
+    elevation: 2,
+  },
+
+  noAlertTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2d3436",
+    marginTop: 10,
+    marginBottom: 4,
+  },
+
+  noAlertText: {
+    fontSize: 14,
+    color: "#636e72",
+    textAlign: "center",
   },
 
   /* Location */
@@ -315,24 +327,41 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 10,
     marginBottom: 5,
+    color: "#2d3436",
+    fontWeight: "600",
   },
-
   locationText: {
     fontSize: 16,
     fontWeight: "500",
     marginBottom: 10,
+    color: "#2d3436",
   },
-
   pickerContainer: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
+    borderColor: "#dfe6e9",
+    borderRadius: 12,
     marginBottom: 15,
+    backgroundColor: "#fff",
+    overflow: "hidden",
   },
 
   /* Buttons */
-  buttonGroup: {
-    marginTop: 10,
+  actionButton: {
+    backgroundColor: "#0f8f84",
+    paddingVertical: 14,
+    borderRadius: 14,
+    marginBottom: 12,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
 
   /* Modal */
@@ -342,27 +371,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   modalContent: {
     backgroundColor: "#fff",
     width: "85%",
-    borderRadius: 10,
+    borderRadius: 16,
     padding: 20,
+    elevation: 4,
   },
-
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 15,
+    color: "#2d3436",
+    textAlign: "center",
   },
-
   modalItem: {
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-
   modalItemText: {
     fontSize: 16,
+    color: "#2d3436",
   },
 });

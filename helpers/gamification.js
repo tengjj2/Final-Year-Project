@@ -110,16 +110,3 @@ export async function getUserProgress() {
 
   return { points, badges, completedTasks, completedQuizzes };
 }
-
-/**
- * Reset all user progress
- * Removes points, badges, tasks, and quizzes
- */
-export async function resetAllProgress() {
-  await AsyncStorage.multiRemove([
-    POINTS_KEY,
-    BADGES_KEY,
-    TASKS_KEY,
-    QUIZZES_KEY,
-  ]);
-}

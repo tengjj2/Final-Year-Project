@@ -1,9 +1,6 @@
 // screens/HomeScreen.js
 
-// React hooks
 import { useEffect, useState, useCallback } from "react";
-
-// React Native components
 import {
   StyleSheet,
   Text,
@@ -11,40 +8,31 @@ import {
   ScrollView,
   View,
 } from "react-native";
-
-// Navigation hook to run logic when screen comes into focus
 import { useFocusEffect } from "@react-navigation/native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-// Helpers
 import { getCurrentEmergency } from "../helpers/emergencyHelper";
 import { getUserProgress } from "../helpers/gamification";
 import { calculateProgress } from "../helpers/progressHelper";
-
-// Datasets
 import tasks from "../data/tasks.json";
 import quizzes from "../data/quizzes.json";
 
 export default function HomeScreen({ navigation }) {
-  // Component state
   const [currentAlert, setCurrentAlert] = useState(getCurrentEmergency());
   const [progress, setProgress] = useState(null);
   const [points, setPoints] = useState(0);
 
-  // Poll for emergency alerts every second
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentAlert(getCurrentEmergency());
     }, 1000);
-
     return () => clearInterval(interval);
   }, []);
 
-  // Load user's preparedness progress when screen comes into focus
   useFocusEffect(
     useCallback(() => {
       const loadProgress = async () => {
         const data = await getUserProgress();
-
         setPoints(data.points);
 
         const calculated = calculateProgress({
@@ -56,15 +44,13 @@ export default function HomeScreen({ navigation }) {
 
         setProgress(calculated);
       };
-
       loadProgress();
     }, []),
   );
 
-  // UI Component
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Emergency Alert Section */}
+      {/* Emergency Alert */}
       <TouchableOpacity
         style={[
           styles.alertSection,
@@ -106,20 +92,31 @@ export default function HomeScreen({ navigation }) {
         )}
       </View>
 
-      {/* Action Grid (3 x 2) */}
+      {/* Action Grid */}
       <View style={styles.grid}>
-        {/* Row 1 */}
         <TouchableOpacity
           style={styles.gridItem}
           onPress={() => navigation.navigate("PreparednessZone")}
         >
-          <Text style={styles.gridText}>Preparedness</Text>
+          <Ionicons
+            name="school"
+            size={28}
+            color="#fff"
+            style={styles.gridIcon}
+          />
+          <Text style={styles.gridText}>Preparedness Zone</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.gridItem}
           onPress={() => navigation.navigate("ResourceHub")}
         >
+          <Ionicons
+            name="library"
+            size={28}
+            color="#fff"
+            style={styles.gridIcon}
+          />
           <Text style={styles.gridText}>Resource Hub</Text>
         </TouchableOpacity>
 
@@ -127,21 +124,44 @@ export default function HomeScreen({ navigation }) {
           style={[styles.gridItem, styles.emergencyGrid]}
           onPress={() => navigation.navigate("EmergencyMode")}
         >
+          <Ionicons
+            name="warning"
+            size={28}
+            color="#fff"
+            style={styles.gridIcon}
+          />
           <Text style={styles.gridText}>Emergency Mode</Text>
         </TouchableOpacity>
 
-        {/* Row 2 */}
-        <View style={[styles.gridItem, styles.disabledGrid]}>
-          <Text style={styles.disabledText}>Coming Soon</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.gridItem}
+          onPress={() => navigation.navigate("Rewards")}
+        >
+          <Ionicons
+            name="gift"
+            size={28}
+            color="#fff"
+            style={styles.gridIcon}
+          />
+          <Text style={styles.gridText}>Rewards</Text>
+        </TouchableOpacity>
 
         <View style={[styles.gridItem, styles.disabledGrid]}>
           <Text style={styles.disabledText}>Coming Soon</Text>
         </View>
 
-        <View style={[styles.gridItem, styles.disabledGrid]}>
-          <Text style={styles.disabledText}>Coming Soon</Text>
-        </View>
+        <TouchableOpacity
+          style={[styles.gridItem, styles.settingsGrid]}
+          onPress={() => navigation.navigate("Settings")}
+        >
+          <Ionicons
+            name="settings"
+            size={28}
+            color="#fff"
+            style={styles.gridIcon}
+          />
+          <Text style={styles.gridText}>Settings</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -151,32 +171,30 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#fff",
     padding: 20,
+    backgroundColor: "#f5f6fa",
   },
 
-  /* Alert */
+  /* Emergency Alert */
   alertSection: {
     minHeight: 120,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 15,
     marginBottom: 25,
     justifyContent: "center",
     alignItems: "center",
+    elevation: 3,
   },
-
   activeAlert: {
     backgroundColor: "#fdecea",
     borderWidth: 1,
     borderColor: "#c0392b",
   },
-
   noAlert: {
     backgroundColor: "#dfe6e9",
     borderWidth: 1,
     borderColor: "#b2bec3",
   },
-
   alertText: {
     fontWeight: "600",
     fontSize: 16,
@@ -185,39 +203,40 @@ const styles = StyleSheet.create({
 
   /* Dashboard */
   dashboard: {
-    backgroundColor: "#f1f2f6",
-    borderRadius: 12,
-    padding: 15,
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    padding: 20,
     marginBottom: 30,
+    elevation: 3,
   },
-
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#2d3436",
   },
-
   progressBarBg: {
-    height: 10,
-    backgroundColor: "#dcdde1",
-    borderRadius: 5,
+    height: 6,
+    backgroundColor: "#b2bec3",
+    borderRadius: 3,
     overflow: "hidden",
-    marginBottom: 10,
+    marginBottom: 8,
+    marginTop: 4,
   },
-
   progressBarFill: {
     height: "100%",
-    backgroundColor: "#2e86de",
+    backgroundColor: "#0f8f84", // teal theme
+    borderRadius: 3,
   },
-
   progressText: {
     fontSize: 14,
     marginBottom: 5,
+    color: "#2d3436",
   },
-
   pointsText: {
     fontSize: 14,
     fontWeight: "600",
+    color: "#2d3436",
   },
 
   /* Grid */
@@ -226,33 +245,35 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
   },
-
   gridItem: {
     width: "30%",
     aspectRatio: 1,
-    backgroundColor: "#2e86de",
-    borderRadius: 12,
+    backgroundColor: "#0f8f84",
+    borderRadius: 16,
     marginBottom: 15,
-    paddingHorizontal: 5,
     justifyContent: "center",
     alignItems: "center",
+    padding: 8,
+    elevation: 2,
   },
-
   emergencyGrid: {
     backgroundColor: "#c0392b",
   },
-
   gridText: {
     color: "#fff",
     fontWeight: "600",
     textAlign: "center",
   },
-
-  /* Disabled Grid */
-  disabledGrid: {
-    backgroundColor: "#dcdde1",
+  settingsGrid: {
+    backgroundColor: "#636e72",
   },
-
+  disabledGrid: {
+    backgroundColor: "#dfe6e9",
+    elevation: 0,
+  },
+  gridIcon: {
+    marginBottom: 2,
+  },
   disabledText: {
     color: "#636e72",
     fontWeight: "600",

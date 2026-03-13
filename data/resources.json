@@ -1,113 +1,203 @@
 {
+  "states": {
+    "Singapore": ["Central", "North", "East", "West"],
+    "Japan": ["Tokyo", "Osaka", "Kyoto"],
+    "England": ["London", "Manchester", "Birmingham"]
+  },
+
   "emergencyContacts": {
     "Singapore": [
       { "name": "Police", "number": "999" },
-      { "name": "SCDF (Fire & Ambulance)", "number": "995" },
-      { "name": "Non-Emergency Ambulance", "number": "1777" }
+      { "name": "SCDF (Fire & Ambulance)", "number": "995" }
     ],
-    "Malaysia": [
-      { "name": "Police", "number": "999" },
-      { "name": "Fire & Rescue", "number": "994" },
-      { "name": "Civil Defence", "number": "991" }
-    ],
-    "USA": [{ "name": "Emergency Services", "number": "911" }],
+
     "Japan": [
       { "name": "Police", "number": "110" },
       { "name": "Fire & Ambulance", "number": "119" }
+    ],
+
+    "England": [
+      { "name": "Emergency Services", "number": "999" },
+      { "name": "NHS Non-Emergency", "number": "111" }
     ]
   },
 
   "shelters": {
-    "Singapore": [
-      {
-        "id": "sg-1",
-        "name": "Community Centre Shelter",
-        "address": "Ang Mo Kio Community Centre, 795 Ang Mo Kio Ave 1, Singapore"
-      },
-      {
-        "id": "sg-2",
-        "name": "School Emergency Shelter",
-        "address": "Anderson Secondary School, 1 Ang Mo Kio Street 64, Singapore"
-      },
-      {
-        "id": "sg-3",
-        "name": "Civil Defence Shelter",
-        "address": "SCDF HQ, 91 Ubi Avenue 4, Singapore"
-      }
-    ],
-    "Malaysia": [
-      {
-        "id": "my-1",
-        "name": "National Disaster Relief Centre",
-        "address": "NADMA Malaysia, Prime Minister's Department, Putrajaya"
-      },
-      {
-        "id": "my-2",
-        "name": "Community Hall Shelter",
-        "address": "Dewan Serbaguna Taman Tun Dr Ismail, Kuala Lumpur"
-      }
-    ],
-    "USA": [
-      {
-        "id": "us-1",
-        "name": "Red Cross Emergency Shelter",
-        "address": "American Red Cross, Los Angeles, CA"
-      },
-      {
-        "id": "us-2",
-        "name": "City Community Shelter",
-        "address": "NYC Emergency Management, 165 Cadman Plaza E, Brooklyn, NY"
-      }
-    ],
-    "Japan": [
-      {
-        "id": "jp-1",
-        "name": "Municipal Evacuation Center",
-        "address": "Shinjuku City Office, 1 Chome-4-1 Kabukicho, Tokyo"
-      },
-      {
-        "id": "jp-2",
-        "name": "School Evacuation Shelter",
-        "address": "Tokyo Metropolitan High School, Tokyo"
-      }
-    ]
+    "Singapore": {
+      "Central": [
+        {
+          "id": "sg1",
+          "name": "Ang Mo Kio Community Shelter",
+          "address": "Ang Mo Kio Community Centre, Singapore"
+        },
+        {
+          "id": "sg2",
+          "name": "Bishan Evacuation Point",
+          "address": "Bishan Community Club, Singapore"
+        }
+      ],
+
+      "North": [
+        {
+          "id": "sg3",
+          "name": "Woodlands Emergency Shelter",
+          "address": "Woodlands Secondary School, Singapore"
+        }
+      ],
+
+      "East": [
+        {
+          "id": "sg4",
+          "name": "Tampines Shelter",
+          "address": "Tampines Community Centre, Singapore"
+        }
+      ],
+
+      "West": [
+        {
+          "id": "sg5",
+          "name": "Jurong Shelter",
+          "address": "Jurong East Community Club, Singapore"
+        }
+      ]
+    },
+
+    "Japan": {
+      "Tokyo": [
+        {
+          "id": "jp1",
+          "name": "Tokyo Evacuation Center",
+          "address": "Shinjuku City Office, Tokyo"
+        }
+      ],
+
+      "Osaka": [
+        {
+          "id": "jp2",
+          "name": "Osaka Community Shelter",
+          "address": "Osaka City Hall, Osaka"
+        }
+      ],
+
+      "Kyoto": [
+        {
+          "id": "jp3",
+          "name": "Kyoto Disaster Shelter",
+          "address": "Kyoto Municipal Hall, Kyoto"
+        }
+      ]
+    },
+
+    "England": {
+      "London": [
+        {
+          "id": "uk1",
+          "name": "London Emergency Shelter",
+          "address": "London City Hall, London"
+        }
+      ],
+
+      "Manchester": [
+        {
+          "id": "uk2",
+          "name": "Manchester Relief Centre",
+          "address": "Manchester Town Hall"
+        }
+      ],
+
+      "Birmingham": [
+        {
+          "id": "uk3",
+          "name": "Birmingham Emergency Centre",
+          "address": "Birmingham Council House"
+        }
+      ]
+    }
   },
 
-  "safetyTips": [
+  "disasterInfo": [
     {
-      "id": 1,
-      "title": "Flood Safety",
-      "tips": [
-        "Move to higher ground immediately.",
-        "Avoid walking or driving through floodwaters.",
-        "Turn off electricity at the main switch if safe to do so."
+      "id": "fire",
+      "title": "Fire",
+      "description": "Fires spread quickly and produce dangerous heat and smoke that can cause injury or death.",
+      "message": "Fire detected nearby. Evacuate immediately and avoid smoke.",
+      "instructions": [
+        "Evacuate the building immediately using the nearest safe exit",
+        "Stay low to avoid inhaling smoke",
+        "Do not use elevators during a fire",
+        "Call emergency services once you are in a safe location"
       ]
     },
     {
-      "id": 2,
-      "title": "Fire Safety",
-      "tips": [
-        "Stay low to avoid smoke inhalation.",
-        "Check doors for heat before opening.",
-        "Use stairs instead of elevators."
+      "id": "earthquake",
+      "title": "Earthquake",
+      "description": "Sudden ground shaking caused by tectonic plate movement that can damage buildings and infrastructure.",
+      "message": "Earthquake occurring. Drop, cover, and hold on.",
+      "instructions": [
+        "Drop to the ground immediately",
+        "Take cover under sturdy furniture",
+        "Hold on until the shaking stops",
+        "Move to an open area away from buildings afterward"
       ]
     },
     {
-      "id": 3,
-      "title": "Earthquake Safety",
-      "tips": [
-        "Drop, cover, and hold on.",
-        "Stay away from windows and heavy furniture.",
-        "Move to open areas after shaking stops."
+      "id": "flood",
+      "title": "Flood",
+      "description": "Overflowing water that can submerge land, homes, and roads.",
+      "message": "Heavy rain expected. Move to higher ground.",
+      "instructions": [
+        "Move to higher ground immediately",
+        "Avoid walking or driving through floodwater",
+        "Turn off electrical mains if it is safe to do so",
+        "Prepare emergency supplies and monitor updates"
       ]
     },
     {
-      "id": 4,
-      "title": "Heatwave Safety",
-      "tips": [
-        "Drink plenty of water.",
-        "Avoid outdoor activities during peak heat hours.",
-        "Check on elderly family members."
+      "id": "typhoon",
+      "title": "Typhoon",
+      "description": "A powerful tropical storm that brings strong winds, heavy rainfall, and possible flooding.",
+      "message": "Typhoon approaching. Stay indoors and secure your surroundings.",
+      "instructions": [
+        "Stay indoors and away from windows",
+        "Secure loose outdoor items",
+        "Prepare emergency supplies and charge devices",
+        "Follow official weather updates and evacuation orders"
+      ]
+    },
+    {
+      "id": "wildfire",
+      "title": "Wildfire",
+      "description": "Large uncontrolled fires that spread rapidly through forests, grasslands, or rural areas.",
+      "message": "Wildfire nearby. Prepare to evacuate immediately.",
+      "instructions": [
+        "Follow evacuation instructions from authorities",
+        "Cover nose and mouth to reduce smoke inhalation",
+        "Close all windows and doors before leaving",
+        "Move to designated evacuation shelters"
+      ]
+    },
+    {
+      "id": "power_outage",
+      "title": "Power Outage",
+      "description": "Loss of electricity due to infrastructure failure, severe weather, or technical issues.",
+      "message": "Power outage reported. Use emergency lighting and conserve battery power.",
+      "instructions": [
+        "Use flashlights instead of candles",
+        "Keep mobile phones charged and conserve battery",
+        "Avoid opening refrigerators frequently",
+        "Listen to official updates for restoration information"
+      ]
+    },
+    {
+      "id": "haze",
+      "title": "Haze",
+      "description": "Air pollution caused by smoke particles that reduce air quality and visibility.",
+      "message": "Air quality is unhealthy due to haze. Limit outdoor activities.",
+      "instructions": [
+        "Wear a protective mask when outdoors",
+        "Stay indoors as much as possible",
+        "Use air purifiers if available",
+        "Monitor official air quality updates"
       ]
     }
   ]

@@ -5,32 +5,39 @@ import resources from "../data/resources.json";
 
 /**
  * Get a list of all supported countries
- * Determined by the countries that have emergency contacts defined
+ * Only countries with defined emergency contacts
  */
 export function getCountries() {
-  return Object.keys(resources.emergencyContacts);
+  // Only Singapore, Japan, England
+  return Object.keys(resources.states).filter((c) =>
+    ["Singapore", "Japan", "England"].includes(c),
+  );
+}
+
+/**
+ * Get states/regions for a country
+ */
+export function getStates(country) {
+  return resources.states[country] || [];
 }
 
 /**
  * Get emergency contacts for a specific country
- * Returns an empty array if the country is not supported
  */
 export function getEmergencyContacts(country) {
   return resources.emergencyContacts[country] || [];
 }
 
 /**
- * Get all safety tips
- * Returns an empty array if no safety tips are defined
+ * Get shelters for a country/state
  */
-export function getSafetyTips() {
-  return resources.safetyTips || [];
+export function getShelters(country, state) {
+  return resources.shelters?.[country]?.[state] || [];
 }
 
 /**
- * Get shelters for a specfic country
- * Returns an empty array if the country is not supported or no shelters
+ * Get all disaster info
  */
-export function getShelters(country) {
-  return resources.shelters?.[country] || [];
-}
+export const getDisasterInfo = () => {
+  return resources.disasterInfo || [];
+};

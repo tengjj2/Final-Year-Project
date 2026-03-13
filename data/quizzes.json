@@ -2,38 +2,62 @@
   {
     "id": 101,
     "type": "quiz",
-    "title": "Flood Safety Quiz",
-    "description": "Test your knowledge on flood preparedness",
-    "points": 10,
-    "badge": "Flood Aware",
+    "category": "fire",
+    "title": "Fire Safety Quiz",
+    "description": "Test your fire safety knowledge after completing the tasks.",
+    "points": 30,
+    "badge": "Fire Smart",
     "questions": [
       {
-        "question": "What should you do during a flood?",
+        "question": "What is the safest way to evacuate during a fire?",
         "options": [
-          "Walk through flood water",
-          "Move to higher ground",
-          "Stay indoors near windows"
+          "Use the elevator",
+          "Stay calm and use stairs",
+          "Hide under furniture"
         ],
-        "answer": "Move to higher ground"
+        "answer": "Stay calm and use stairs"
       },
       {
-        "question": "Which item is essential to keep handy during a flood?",
-        "options": ["Umbrella", "First-aid kit", "Bicycle"],
-        "answer": "First-aid kit"
+        "question": "Which action reduces fire risk around the home?",
+        "options": [
+          "Keep flammable items away from heat",
+          "Leave cooking unattended",
+          "Stack newspapers near stove"
+        ],
+        "answer": "Keep flammable items away from heat"
       },
       {
-        "question": "Should you drive through flooded roads?",
-        "options": ["Yes, if the car is big", "No", "Yes, slowly"],
-        "answer": "No"
+        "question": "When should you use a fire extinguisher?",
+        "options": [
+          "On large uncontrolled fires",
+          "On small fires if safe",
+          "Never"
+        ],
+        "answer": "On small fires if safe"
+      },
+      {
+        "question": "What should you check monthly for fire safety?",
+        "options": ["Smoke alarms", "Windows", "Curtains"],
+        "answer": "Smoke alarms"
+      },
+      {
+        "question": "During a fire drill, what is important?",
+        "options": [
+          "Grab valuables first",
+          "Designate a safe meeting point outside",
+          "Ignore the drill"
+        ],
+        "answer": "Designate a safe meeting point outside"
       }
     ]
   },
   {
     "id": 102,
     "type": "quiz",
-    "title": "Earthquake Preparedness Quiz",
-    "description": "Assess your earthquake safety knowledge",
-    "points": 15,
+    "category": "earthquake",
+    "title": "Earthquake Quiz",
+    "description": "Test your earthquake knowledge.",
+    "points": 30,
     "badge": "Quake Ready",
     "questions": [
       {
@@ -46,46 +70,180 @@
         "answer": "Drop, Cover, and Hold On"
       },
       {
-        "question": "Which is NOT recommended in an earthquake emergency kit?",
+        "question": "Which is NOT recommended in an emergency kit?",
         "options": ["Bottled water", "Candles and matches", "Heavy furniture"],
         "answer": "Heavy furniture"
       },
       {
-        "question": "After shaking stops, you should:",
-        "options": [
-          "Check for injuries and damages",
-          "Take a nap",
-          "Go for a walk in the street"
-        ],
-        "answer": "Check for injuries and damages"
+        "question": "How often should you practice an earthquake drill?",
+        "options": ["Once a year", "Every 6 months", "Only during earthquakes"],
+        "answer": "Every 6 months"
+      },
+      {
+        "question": "What should you do with heavy furniture?",
+        "options": ["Anchor to walls", "Leave unsecured", "Stack items on top"],
+        "answer": "Anchor to walls"
+      },
+      {
+        "question": "During shaking, safest place is:",
+        "options": ["Under a sturdy table", "Near windows", "Doorway corners"],
+        "answer": "Under a sturdy table"
       }
     ]
   },
   {
     "id": 103,
     "type": "quiz",
-    "title": "Fire Safety Quiz",
-    "description": "Learn how to react during a fire",
-    "points": 10,
-    "badge": "Fire Smart",
+    "category": "flood",
+    "title": "Flood Safety Quiz",
+    "description": "Test your flood preparedness knowledge.",
+    "points": 30,
+    "badge": "Flood Aware",
     "questions": [
       {
-        "question": "If a fire breaks out, you should:",
+        "question": "During a flood warning, you should:",
         "options": [
-          "Use the elevator to escape",
-          "Stay calm and use stairs",
-          "Hide under a bed"
+          "Go outside to observe",
+          "Move to higher ground",
+          "Drive through flooded roads"
         ],
-        "answer": "Stay calm and use stairs"
+        "answer": "Move to higher ground"
       },
       {
-        "question": "A fire extinguisher should be used:",
+        "question": "Essential item for floods:",
+        "options": ["First aid kit", "Umbrella", "Laptop"],
+        "answer": "First aid kit"
+      },
+      {
+        "question": "True or False: Walking through moving flood water is safe if knee-deep.",
+        "options": ["True", "False"],
+        "answer": "False"
+      },
+      {
+        "question": "What should you do with contaminated water?",
+        "options": ["Drink it", "Avoid contact", "Use directly for cooking"],
+        "answer": "Avoid contact"
+      },
+      {
+        "question": "Flash flood in a car: safest action?",
         "options": [
-          "On large uncontrolled fires",
-          "On small fires if safe",
-          "Never"
+          "Drive slowly through water",
+          "Abandon car and move to higher ground",
+          "Wait in the car"
         ],
-        "answer": "On small fires if safe"
+        "answer": "Abandon car and move to higher ground"
+      }
+    ]
+  },
+  {
+    "id": 104,
+    "type": "quiz",
+    "category": "typhoon",
+    "title": "Typhoon Quiz",
+    "description": "Test your typhoon preparedness knowledge.",
+    "points": 30,
+    "badge": "Typhoon Ready",
+    "questions": [
+      {
+        "question": "What should you do when a typhoon warning is issued?",
+        "options": [
+          "Go outside to check water levels",
+          "Stay indoors and follow evacuation plan",
+          "Continue normal activities"
+        ],
+        "answer": "Stay indoors and follow evacuation plan"
+      },
+      {
+        "question": "Which items should you have ready before a typhoon?",
+        "options": [
+          "Emergency kit and charged devices",
+          "Only cash",
+          "Nothing, just wait"
+        ],
+        "answer": "Emergency kit and charged devices"
+      }
+    ]
+  },
+  {
+    "id": 105,
+    "type": "quiz",
+    "category": "wildfire",
+    "title": "Wildfire Quiz",
+    "description": "Test your wildfire safety knowledge.",
+    "points": 30,
+    "badge": "Wildfire Smart",
+    "questions": [
+      {
+        "question": "How should you respond to nearby wildfire smoke?",
+        "options": [
+          "Evacuate or stay indoors following instructions",
+          "Ignore and continue outdoor activities",
+          "Open windows for fresh air"
+        ],
+        "answer": "Evacuate or stay indoors following instructions"
+      },
+      {
+        "question": "Which preparation reduces wildfire risk at home?",
+        "options": [
+          "Clear flammable debris around home",
+          "Store firewood near house",
+          "Leave grass uncut"
+        ],
+        "answer": "Clear flammable debris around home"
+      }
+    ]
+  },
+  {
+    "id": 106,
+    "type": "quiz",
+    "category": "power",
+    "title": "Power Outage Quiz",
+    "description": "Test your knowledge on handling power outages.",
+    "points": 30,
+    "badge": "Power Ready",
+    "questions": [
+      {
+        "question": "What is the safest light source during a blackout?",
+        "options": ["Candles near flammable items", "Flashlights", "Gas stove"],
+        "answer": "Flashlights"
+      },
+      {
+        "question": "What should you do with electronics during a power outage?",
+        "options": [
+          "Unplug sensitive devices",
+          "Leave them plugged in",
+          "Turn everything on"
+        ],
+        "answer": "Unplug sensitive devices"
+      }
+    ]
+  },
+  {
+    "id": 107,
+    "type": "quiz",
+    "category": "haze",
+    "title": "Haze Quiz",
+    "description": "Test your haze safety knowledge.",
+    "points": 30,
+    "badge": "Haze Safe",
+    "questions": [
+      {
+        "question": "What should you do during hazardous haze?",
+        "options": [
+          "Go jogging outdoors",
+          "Stay indoors and follow safety guidelines",
+          "Ignore haze warnings"
+        ],
+        "answer": "Stay indoors and follow safety guidelines"
+      },
+      {
+        "question": "Which protects you from haze indoors?",
+        "options": [
+          "Open windows",
+          "Use air purifier",
+          "No precautions needed"
+        ],
+        "answer": "Use air purifier"
       }
     ]
   }

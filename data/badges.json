@@ -1,37 +1,51 @@
 [
   {
-    "id": "Prepared Starter",
-    "name": "Prepared Starter",
-    "description": "Completed your first preparedness task"
-  },
-  {
-    "id": "Flood Aware",
-    "name": "Flood Aware",
-    "description": "Passed the flood safety quiz"
+    "id": "Fire Smart",
+    "name": "Fire Smart",
+    "description": "Passed the Fire Safety Final Quiz",
+    "category": "fire",
+    "type": "quiz"
   },
   {
     "id": "Quake Ready",
     "name": "Quake Ready",
-    "description": "Passed the earthquake preparedness quiz"
+    "description": "Passed the Earthquake Final Quiz",
+    "category": "earthquake",
+    "type": "quiz"
   },
   {
-    "id": "Fire Smart",
-    "name": "Fire Smart",
-    "description": "Passed the fire safety quiz"
+    "id": "Flood Aware",
+    "name": "Flood Aware",
+    "description": "Passed the Flood Preparedness Quiz",
+    "category": "flood",
+    "type": "quiz"
   },
   {
-    "id": "Family Planner",
-    "name": "Family Planner",
-    "description": "Created a complete family emergency plan"
+    "id": "Typhoon Ready",
+    "name": "Typhoon Ready",
+    "description": "Passed the Typhoon Final Quiz",
+    "category": "typhoon",
+    "type": "quiz"
   },
   {
-    "id": "Safety Checker",
-    "name": "Safety Checker",
-    "description": "Completed a full home safety inspection"
+    "id": "Wildfire Smart",
+    "name": "Wildfire Smart",
+    "description": "Passed the Wildfire Final Quiz",
+    "category": "wildfire",
+    "type": "quiz"
   },
   {
-    "id": "Fire Drill Expert",
-    "name": "Fire Drill Expert",
-    "description": "Successfully practiced a fire drill"
+    "id": "Power Ready",
+    "name": "Power Ready",
+    "description": "Passed the Power Outage Final Quiz",
+    "category": "power",
+    "type": "quiz"
+  },
+  {
+    "id": "Haze Safe",
+    "name": "Haze Safe",
+    "description": "Passed the Haze Final Quiz",
+    "category": "haze",
+    "type": "quiz"
   }
 ]
