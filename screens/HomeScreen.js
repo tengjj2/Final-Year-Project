@@ -18,8 +18,8 @@ import { getUserProgress } from "../helpers/gamification";
 import { calculateProgress } from "../helpers/progressHelper";
 import tasks from "../data/tasks.json";
 import quizzes from "../data/quizzes.json";
-import { loadTheme, defaultTheme } from "../helpers/theme";
 import { ThemeContext } from "../helpers/themeContext";
+import BottomNavigation from "../helpers/bottomNavigation";
 
 import {
   loadFontSize,
@@ -78,153 +78,162 @@ export default function HomeScreen({ navigation }) {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Emergency Alert */}
-      <TouchableOpacity
-        style={[
-          styles.alertSection,
-          currentAlert ? styles.activeAlert : styles.noAlert,
-        ]}
-        onPress={() => navigation.navigate("EmergencyMode")}
-      >
-        <Text style={[styles.alertText, { fontSize: scaleFont(16) }]}>
-          {currentAlert
-            ? `${currentAlert.title}: ${currentAlert.message}`
-            : t("noCurrentEmergencies")}
-        </Text>
-      </TouchableOpacity>
-
-      {/* Preparedness Dashboard */}
-      <TouchableOpacity
-        style={styles.dashboard}
-        onPress={() => navigation.navigate("PreparednessZone")}
-      >
-        <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
-          {t("preparednessProgress")}
-        </Text>
-
-        {progress ? (
-          <>
-            <View style={styles.progressBarBg}>
-              <View
-                style={[
-                  styles.progressBarFill,
-                  {
-                    width: `${progress.percentage}%`,
-                    backgroundColor: theme.primary,
-                  },
-                ]}
-              />
-            </View>
-
-            <Text style={[styles.progressText, { fontSize: scaleFont(14) }]}>
-              {progress.completedActivities} / {progress.totalActivities}{" "}
-              {t("activitiesCompleted")}
-            </Text>
-
-            <Text style={[styles.pointsText, { fontSize: scaleFont(14) }]}>
-              {points} {t("pointsEarned")}
-            </Text>
-          </>
-        ) : (
-          <Text style={[styles.progressText, { fontSize: scaleFont(14) }]}>
-            {t("loadingProgress")}
-          </Text>
-        )}
-      </TouchableOpacity>
-
-      {/* Action Grid */}
-      <View style={styles.grid}>
+    <View style={styles.screenContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Emergency Alert */}
         <TouchableOpacity
-          style={[styles.gridItem, { backgroundColor: theme.primary }]}
-          onPress={() => navigation.navigate("PreparednessZone")}
-        >
-          <Ionicons
-            name="school"
-            size={28}
-            color="#fff"
-            style={styles.gridIcon}
-          />
-          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
-            {t("preparednessZoneTitle")}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.gridItem, { backgroundColor: theme.primary }]}
-          onPress={() => navigation.navigate("ResourceHub")}
-        >
-          <Ionicons
-            name="library"
-            size={28}
-            color="#fff"
-            style={styles.gridIcon}
-          />
-          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
-            {t("resourceHubTitle")}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.gridItem, styles.emergencyGrid]}
+          style={[
+            styles.alertSection,
+            currentAlert ? styles.activeAlert : styles.noAlert,
+          ]}
           onPress={() => navigation.navigate("EmergencyMode")}
         >
-          <Ionicons
-            name="warning"
-            size={28}
-            color="#fff"
-            style={styles.gridIcon}
-          />
-          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
-            {t("emergencyModeTitle")}
+          <Text style={[styles.alertText, { fontSize: scaleFont(16) }]}>
+            {currentAlert
+              ? `${currentAlert.title}: ${currentAlert.message}`
+              : t("noCurrentEmergencies")}
           </Text>
         </TouchableOpacity>
 
+        {/* Preparedness Dashboard */}
         <TouchableOpacity
-          style={[styles.gridItem, { backgroundColor: theme.primary }]}
-          onPress={() => navigation.navigate("Rewards")}
+          style={styles.dashboard}
+          onPress={() => navigation.navigate("PreparednessZone")}
         >
-          <Ionicons
-            name="gift"
-            size={28}
-            color="#fff"
-            style={styles.gridIcon}
-          />
-          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
-            {t("rewardsTitle")}
+          <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
+            {t("preparednessProgress")}
           </Text>
+
+          {progress ? (
+            <>
+              <View style={styles.progressBarBg}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    {
+                      width: `${progress.percentage}%`,
+                      backgroundColor: theme.primary,
+                    },
+                  ]}
+                />
+              </View>
+
+              <Text style={[styles.progressText, { fontSize: scaleFont(14) }]}>
+                {progress.completedActivities} / {progress.totalActivities}{" "}
+                {t("activitiesCompleted")}
+              </Text>
+
+              <Text style={[styles.pointsText, { fontSize: scaleFont(14) }]}>
+                {t("Points: ")}
+                {points}
+              </Text>
+            </>
+          ) : (
+            <Text style={[styles.progressText, { fontSize: scaleFont(14) }]}>
+              {t("loadingProgress")}
+            </Text>
+          )}
         </TouchableOpacity>
 
-        <View style={[styles.gridItem, styles.disabledGrid]}>
-          <Text style={[styles.disabledText, { fontSize: scaleFont(14) }]}>
-            {t("comingSoon")}
-          </Text>
+        {/* Action Grid */}
+        <View style={styles.grid}>
+          <TouchableOpacity
+            style={[styles.gridItem, { backgroundColor: theme.primary }]}
+            onPress={() => navigation.navigate("PreparednessZone")}
+          >
+            <Ionicons
+              name="school"
+              size={28}
+              color="#fff"
+              style={styles.gridIcon}
+            />
+            <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+              {t("preparednessZoneTitle")}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.gridItem, { backgroundColor: theme.primary }]}
+            onPress={() => navigation.navigate("ResourceHub")}
+          >
+            <Ionicons
+              name="library"
+              size={28}
+              color="#fff"
+              style={styles.gridIcon}
+            />
+            <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+              {t("resourceHubTitle")}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.gridItem, styles.emergencyGrid]}
+            onPress={() => navigation.navigate("EmergencyMode")}
+          >
+            <Ionicons
+              name="warning"
+              size={28}
+              color="#fff"
+              style={styles.gridIcon}
+            />
+            <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+              {t("emergencyModeTitle")}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.gridItem, { backgroundColor: theme.primary }]}
+            onPress={() => navigation.navigate("Rewards")}
+          >
+            <Ionicons
+              name="gift"
+              size={28}
+              color="#fff"
+              style={styles.gridIcon}
+            />
+            <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+              {t("rewardsTitle")}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={[styles.gridItem, styles.disabledGrid]}>
+            <Text style={[styles.disabledText, { fontSize: scaleFont(14) }]}>
+              {t("comingSoon")}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            style={[styles.gridItem, styles.settingsGrid]}
+            onPress={() => navigation.navigate("Settings")}
+          >
+            <Ionicons
+              name="settings"
+              size={28}
+              color="#fff"
+              style={styles.gridIcon}
+            />
+            <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+              {t("settingsTitle")}
+            </Text>
+          </TouchableOpacity>
         </View>
+      </ScrollView>
 
-        <TouchableOpacity
-          style={[styles.gridItem, styles.settingsGrid]}
-          onPress={() => navigation.navigate("Settings")}
-        >
-          <Ionicons
-            name="settings"
-            size={28}
-            color="#fff"
-            style={styles.gridIcon}
-          />
-          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
-            {t("settingsTitle")}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      {/* Bottom Navigation Bar (sticky) */}
+      <BottomNavigation activeKey="Home" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
+  screenContainer: {
+    flex: 1,
     backgroundColor: "#f5f6fa",
+  },
+  scrollContainer: {
+    padding: 20,
+    paddingBottom: 80,
   },
 
   /* Emergency Alert */

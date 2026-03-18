@@ -1,3 +1,4 @@
+// SettingsScreen.js
 import { useState, useEffect, useContext } from "react";
 import {
   View,
@@ -12,8 +13,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
-import { resetAllAppData } from "../helpers/settingsHelper";
 import { ThemeContext } from "../helpers/themeContext";
+import BottomNavigation from "../helpers/bottomNavigation";
 
 import {
   scaleFont,
@@ -24,13 +25,16 @@ import {
 
 import { loadLanguage, saveLanguage } from "../helpers/languageHelper";
 
+import { resetAllAppData } from "../helpers/settingsHelper";
+
 export default function SettingsScreen() {
   const { t } = useTranslation();
 
-  const [resetting, setResetting] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState("en");
   const [fontSize, setFontSize] = useState("medium");
-  const { theme } = useContext(ThemeContext);
+  const [resetting, setResetting] = useState(false);
+
+  const { theme, resetTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     initializeSettings();
@@ -44,7 +48,6 @@ export default function SettingsScreen() {
     setFontSize(size);
 
     updateFontScale(size);
-
     i18n.changeLanguage(lang);
   };
 
@@ -60,168 +63,203 @@ export default function SettingsScreen() {
     updateFontScale(size);
   };
 
-  const handleResetApp = async () => {
-    Alert.alert(t("dangerZone"), t("resetWarning"), [
-      { text: t("cancel"), style: "cancel" },
-      {
-        text: t("reset"),
-        style: "destructive",
-        onPress: async () => {
-          setResetting(true);
+  // Handle complete app reset
+  // inside SettingsScreen.js
+  const handleResetApp = () => {
+    Alert.alert(
+      t("dangerZone"),
+      t("resetWarning") ||
+        "This will reset points, purchased themes, settings, and preferences. Are you sure?",
+      [
+        { text: t("cancel") || "Cancel", style: "cancel" },
+        {
+          text: t("reset") || "Reset",
+          style: "destructive",
+          onPress: async () => {
+            setResetting(true);
 
-          const success = await resetAllAppData();
+            // 1. Reset all AsyncStorage data (including gamification, themes, etc.)
+            await resetAllAppData();
 
-          setResetting(false);
+            // 2. Reset theme to default
+            await resetTheme();
 
-          if (success) {
+            // 3. Reset language to English
+            await saveLanguage("en");
             setCurrentLanguage("en");
-            setFontSize("medium");
-
             i18n.changeLanguage("en");
+
+            // 4. Reset font size to medium
+            await saveFontSize("medium");
+            setFontSize("medium");
             updateFontScale("medium");
 
-            Alert.alert(t("resetCompleteTitle"), t("resetComplete"));
-          }
+            setResetting(false);
+
+            Alert.alert(
+              t("resetCompleteTitle") || "Reset Complete",
+              t("resetComplete") || "App has been reset to default settings.",
+            );
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text
-        style={{ fontSize: scaleFont(16), marginBottom: 20, color: "#636e72" }}
+    <View style={styles.screenContainer}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
       >
-        {t("subtitle")}
-      </Text>
-
-      {/* TEXT SIZE */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
-          {t("textSize")}
+        <Text
+          style={{
+            fontSize: scaleFont(16),
+            marginBottom: 20,
+            color: "#636e72",
+          }}
+        >
+          {t("subtitle")}
         </Text>
 
-        {[
-          { key: "small", label: t("textSmall") },
-          { key: "medium", label: t("textMedium") },
-          { key: "large", label: t("textLarge") },
-          { key: "extraLarge", label: t("textExtraLarge") },
-        ].map((size) => (
-          <TouchableOpacity
-            key={size.key}
-            style={[
-              styles.optionButton,
-              {
-                backgroundColor: theme.accent,
-              },
-            ]}
-            onPress={() => changeFontSize(size.key)}
-          >
-            <Text style={{ fontSize: scaleFont(16) }}>{size.label}</Text>
-
-            {fontSize === size.key && (
-              <Ionicons name="checkmark" size={20} color={theme.primary} />
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* LANGUAGE */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
-          {t("language")}
-        </Text>
-
-        {[
-          { code: "en", label: "English" },
-          { code: "ms", label: "Bahasa Melayu" },
-          { code: "zh", label: "中文" },
-          { code: "ja", label: "日本語" },
-          { code: "es", label: "Español" },
-        ].map((lang) => (
-          <TouchableOpacity
-            key={lang.code}
-            style={[
-              styles.optionButton,
-              {
-                backgroundColor: theme.accent,
-              },
-            ]}
-            onPress={() => changeLanguage(lang.code)}
-          >
-            <Text style={{ fontSize: scaleFont(16) }}>{lang.label}</Text>
-
-            {currentLanguage === lang.code && (
-              <Ionicons name="checkmark" size={20} color={theme.primary} />
-            )}
-          </TouchableOpacity>
-        ))}
-
-        <View style={styles.betaNotice}>
-          <Ionicons name="alert-circle-outline" size={18} color="#ffa500" />
-          <Text
-            style={{
-              fontSize: scaleFont(13),
-              marginLeft: 6,
-              color: "#636e72",
-              fontStyle: "italic",
-              flexShrink: 1,
-            }}
-          >
-            {t("languageBetaNotice")}
+        {/* TEXT SIZE */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
+            {t("textSize")}
           </Text>
+
+          {[
+            { key: "small", label: t("textSmall") },
+            { key: "medium", label: t("textMedium") },
+            { key: "large", label: t("textLarge") },
+            { key: "extraLarge", label: t("textExtraLarge") },
+          ].map((size) => (
+            <TouchableOpacity
+              key={size.key}
+              style={[
+                styles.optionButton,
+                {
+                  backgroundColor: theme.accent,
+                },
+              ]}
+              onPress={() => changeFontSize(size.key)}
+            >
+              <Text style={{ fontSize: scaleFont(16) }}>{size.label}</Text>
+
+              {fontSize === size.key && (
+                <Ionicons name="checkmark" size={20} color={theme.primary} />
+              )}
+            </TouchableOpacity>
+          ))}
         </View>
-      </View>
 
-      {/* DANGER ZONE */}
-      <View style={styles.dangerZone}>
-        <Ionicons name="alert-circle" size={34} color="#d63031" />
+        {/* LANGUAGE */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
+            {t("language")}
+          </Text>
 
-        <Text
-          style={{
-            fontSize: scaleFont(18),
-            fontWeight: "bold",
-            color: "#d63031",
-            marginTop: 8,
-          }}
-        >
-          {t("dangerZone")}
-        </Text>
+          {[
+            { code: "en", label: "English" },
+            { code: "ms", label: "Bahasa Melayu" },
+            { code: "zh", label: "中文" },
+            { code: "ja", label: "日本語" },
+            { code: "es", label: "Español" },
+          ].map((lang) => (
+            <TouchableOpacity
+              key={lang.code}
+              style={[
+                styles.optionButton,
+                {
+                  backgroundColor: theme.accent,
+                },
+              ]}
+              onPress={() => changeLanguage(lang.code)}
+            >
+              <Text style={{ fontSize: scaleFont(16) }}>{lang.label}</Text>
 
-        <Text
-          style={{
-            fontSize: scaleFont(14),
-            color: "#b71c1c",
-            textAlign: "center",
-            marginVertical: 12,
-          }}
-        >
-          {t("resetDescription")}
-          <Text style={{ fontWeight: "bold" }}>{t("resetBold")}</Text>
-          {t("resetDescription2")}
-        </Text>
+              {currentLanguage === lang.code && (
+                <Ionicons name="checkmark" size={20} color={theme.primary} />
+              )}
+            </TouchableOpacity>
+          ))}
 
-        <TouchableOpacity
-          style={styles.resetButton}
-          onPress={handleResetApp}
-          disabled={resetting}
-        >
+          <View style={styles.betaNotice}>
+            <Ionicons name="alert-circle-outline" size={18} color="#ffa500" />
+            <Text
+              style={{
+                fontSize: scaleFont(13),
+                marginLeft: 6,
+                color: "#636e72",
+                fontStyle: "italic",
+                flexShrink: 1,
+              }}
+            >
+              {t("languageBetaNotice")}
+            </Text>
+          </View>
+        </View>
+
+        {/* DANGER ZONE */}
+        <View style={styles.dangerZone}>
+          <Ionicons name="alert-circle" size={34} color="#d63031" />
           <Text
             style={{
-              color: "#fff",
-              fontSize: scaleFont(16),
+              fontSize: scaleFont(18),
               fontWeight: "bold",
+              color: "#d63031",
+              marginTop: 8,
             }}
           >
-            {resetting ? t("resetting") : t("resetData")}
+            {t("dangerZone") || "Danger Zone"}
           </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+
+          {/* Updated Description */}
+          <Text
+            style={{
+              fontSize: scaleFont(14),
+              color: "#b71c1c",
+              textAlign: "center",
+              marginVertical: 12,
+              lineHeight: 20,
+            }}
+          >
+            {t("resetDescription")}
+            <Text style={{ fontWeight: "bold" }}>{t("resetBold")}</Text>
+            {t("resetDescription2")}
+          </Text>
+
+          <TouchableOpacity
+            style={styles.resetButton}
+            onPress={handleResetApp}
+            disabled={resetting}
+          >
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: scaleFont(16),
+                fontWeight: "bold",
+              }}
+            >
+              {resetting
+                ? t("resetting") || "Resetting..."
+                : t("resetData") || "Reset App"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      {/* Bottom Navigation Bar (sticky) */}
+      <BottomNavigation activeKey="Settings" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    backgroundColor: "#f5f6fa",
+  },
+
   container: {
     flex: 1,
     backgroundColor: "#f5f6fa",
@@ -229,7 +267,7 @@ const styles = StyleSheet.create({
 
   content: {
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 140,
   },
 
   section: {

@@ -18,6 +18,7 @@ import tasks from "../data/tasks.json";
 import quizzes from "../data/quizzes.json";
 import badgesData from "../data/badges.json";
 import { ThemeContext } from "../helpers/themeContext";
+import BottomNavigation from "../helpers/bottomNavigation";
 
 import {
   calculateProgress,
@@ -127,151 +128,233 @@ export default function PreparednessZone({ navigation }) {
   }
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.scrollContent}
-    >
-      {/* Progress Section */}
-      <View style={styles.sectionHeaderRow}>
-        <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
-          Progress
-        </Text>
-
-        {/* Rewards Button */}
-        <TouchableOpacity
-          style={{ padding: 4 }}
-          onPress={() => navigation.navigate("Rewards")}
-        >
-          <Text
-            style={[
-              styles.viewAllText,
-              { fontSize: scaleFont(14), color: theme.primary },
-            ]}
-          >
-            Rewards
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View
-        style={[
-          styles.progressBox,
-          {
-            backgroundColor: theme.accent,
-            borderColor: theme.secondary,
-          },
-        ]}
+    <View style={styles.screenContainer}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.scrollContent}
       >
-        <Text style={[styles.progressLabel, { fontSize: scaleFont(14) }]}>
-          {progress.percentage || 0}% of all tasks and quizzes completed.
-        </Text>
+        {/* Progress Section */}
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
+            Progress
+          </Text>
 
-        <View style={styles.progressBar}>
-          <View
-            style={[
-              styles.progressFill,
-              {
-                width: `${progress.percentage || 0}%`,
-                backgroundColor: theme.primary,
-              },
-            ]}
-          />
+          {/* Rewards Button */}
+          <TouchableOpacity
+            style={{ padding: 4 }}
+            onPress={() => navigation.navigate("Rewards")}
+          >
+            <Text
+              style={[
+                styles.viewAllText,
+                { fontSize: scaleFont(14), color: theme.primary },
+              ]}
+            >
+              Rewards
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        <Text style={[styles.pointsText, { fontSize: scaleFont(14) }]}>
-          Points: {points || 0}
-        </Text>
-      </View>
-
-      {/* Badges Section */}
-      <View style={styles.sectionHeaderRow}>
-        <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
-          Badges
-        </Text>
-
-        <TouchableOpacity onPress={() => setBadgeListModalVisible(true)}>
-          <Text
-            style={[
-              styles.viewAllText,
-              { fontSize: scaleFont(14), color: theme.primary },
-            ]}
-          >
-            View All
+        <View
+          style={[
+            styles.progressBox,
+            {
+              backgroundColor: theme.accent,
+              borderColor: theme.secondary,
+            },
+          ]}
+        >
+          <Text style={[styles.progressLabel, { fontSize: scaleFont(14) }]}>
+            {progress.percentage || 0}% of all tasks and quizzes completed.
           </Text>
-        </TouchableOpacity>
-      </View>
 
-      <FlatList
-        data={badgesData}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.badgeRow}
-        renderItem={({ item }) => {
-          const earned = userBadges.includes(item.id);
-          return (
-            <TouchableOpacity
+          <View style={styles.progressBar}>
+            <View
               style={[
-                styles.badgeItem,
-                earned ? styles.earnedBadge : styles.lockedBadge,
-                earned && { backgroundColor: theme.primary },
+                styles.progressFill,
+                {
+                  width: `${progress.percentage || 0}%`,
+                  backgroundColor: theme.primary,
+                },
               ]}
-              activeOpacity={0.7}
-              onPress={() => openBadgeModal(item)}
-            >
-              <Ionicons
-                name={earned ? "trophy" : "lock-closed"}
-                size={28}
-                color={earned ? "#ffbf00" : "#636e72"}
-              />
-              <Text
-                style={[
-                  styles.badgeName,
-                  earned && styles.earnedBadgeText,
-                  { fontSize: scaleFont(14) },
-                ]}
-              >
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
+            />
+          </View>
 
-      {/* Badge Modal */}
-      {selectedBadge && (
+          <Text style={[styles.pointsText, { fontSize: scaleFont(14) }]}>
+            Points: {points || 0}
+          </Text>
+        </View>
+
+        {/* Badges Section */}
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
+            Badges
+          </Text>
+
+          <TouchableOpacity onPress={() => setBadgeListModalVisible(true)}>
+            <Text
+              style={[
+                styles.viewAllText,
+                { fontSize: scaleFont(14), color: theme.primary },
+              ]}
+            >
+              View All
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={badgesData}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.badgeRow}
+          renderItem={({ item }) => {
+            const earned = userBadges.includes(item.id);
+            return (
+              <TouchableOpacity
+                style={[
+                  styles.badgeItem,
+                  earned ? styles.earnedBadge : styles.lockedBadge,
+                  earned && { backgroundColor: theme.primary },
+                ]}
+                activeOpacity={0.7}
+                onPress={() => openBadgeModal(item)}
+              >
+                <Ionicons
+                  name={earned ? "trophy" : "lock-closed"}
+                  size={28}
+                  color={earned ? "#ffbf00" : "#636e72"}
+                />
+                <Text
+                  style={[
+                    styles.badgeName,
+                    earned && styles.earnedBadgeText,
+                    { fontSize: scaleFont(14) },
+                  ]}
+                >
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
+        />
+
+        {/* Badge Modal */}
+        {selectedBadge && (
+          <Modal
+            visible={badgeModalVisible}
+            transparent
+            animationType="slide"
+            onRequestClose={() => setBadgeModalVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Ionicons
+                  name={
+                    userBadges.includes(selectedBadge.id)
+                      ? "trophy"
+                      : "lock-closed"
+                  }
+                  size={48}
+                  color={
+                    userBadges.includes(selectedBadge.id)
+                      ? "#ffbf00"
+                      : "#636e72"
+                  }
+                  style={{ marginBottom: 12 }}
+                />
+                <Text style={[styles.modalTitle, { fontSize: scaleFont(20) }]}>
+                  {selectedBadge.name}
+                </Text>
+                <Text style={[styles.modalDesc, { fontSize: scaleFont(14) }]}>
+                  {selectedBadge.description}
+                </Text>
+                <TouchableOpacity
+                  style={[
+                    styles.modalCloseButton,
+                    { backgroundColor: theme.primary },
+                  ]}
+                  onPress={() => setBadgeModalVisible(false)}
+                >
+                  <Text
+                    style={[styles.modalCloseText, { fontSize: scaleFont(14) }]}
+                  >
+                    Close
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        )}
+
+        {/* Badge List Modal */}
         <Modal
-          visible={badgeModalVisible}
+          visible={badgeListModalVisible}
           transparent
           animationType="slide"
-          onRequestClose={() => setBadgeModalVisible(false)}
+          onRequestClose={() => setBadgeListModalVisible(false)}
         >
           <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Ionicons
-                name={
-                  userBadges.includes(selectedBadge.id)
-                    ? "trophy"
-                    : "lock-closed"
-                }
-                size={48}
-                color={
-                  userBadges.includes(selectedBadge.id) ? "#ffbf00" : "#636e72"
-                }
-                style={{ marginBottom: 12 }}
-              />
+            <View
+              style={[styles.modalContent, { width: "90%", maxHeight: "80%" }]}
+            >
               <Text style={[styles.modalTitle, { fontSize: scaleFont(20) }]}>
-                {selectedBadge.name}
+                All Badges
               </Text>
-              <Text style={[styles.modalDesc, { fontSize: scaleFont(14) }]}>
-                {selectedBadge.description}
-              </Text>
+              <FlatList
+                data={badgesData}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => {
+                  const earned = userBadges.includes(item.id);
+                  return (
+                    <View
+                      style={[
+                        styles.listBadgeItem,
+                        earned
+                          ? { backgroundColor: theme.primary }
+                          : styles.lockedBadge,
+                      ]}
+                    >
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <Ionicons
+                          name={earned ? "trophy" : "lock-closed"}
+                          size={24}
+                          color={earned ? "#ffbf00" : "#636e72"}
+                          style={{ marginRight: 8 }}
+                        />
+                        <Text
+                          style={[
+                            styles.badgeName,
+                            earned && styles.earnedBadgeText,
+                            { fontSize: scaleFont(14) },
+                          ]}
+                        >
+                          {item.name}
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          fontSize: scaleFont(12),
+                          color: earned ? "#fff" : "#636e72",
+                          marginLeft: 32,
+                        }}
+                      >
+                        {item.description}
+                      </Text>
+                    </View>
+                  );
+                }}
+              />
               <TouchableOpacity
                 style={[
                   styles.modalCloseButton,
+                  { marginTop: 10 },
                   { backgroundColor: theme.primary },
                 ]}
-                onPress={() => setBadgeModalVisible(false)}
+                onPress={() => setBadgeListModalVisible(false)}
               >
                 <Text
                   style={[styles.modalCloseText, { fontSize: scaleFont(14) }]}
@@ -282,207 +365,137 @@ export default function PreparednessZone({ navigation }) {
             </View>
           </View>
         </Modal>
-      )}
 
-      {/* Badge List Modal */}
-      <Modal
-        visible={badgeListModalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setBadgeListModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View
-            style={[styles.modalContent, { width: "90%", maxHeight: "80%" }]}
-          >
-            <Text style={[styles.modalTitle, { fontSize: scaleFont(20) }]}>
-              All Badges
-            </Text>
-            <FlatList
-              data={badgesData}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => {
-                const earned = userBadges.includes(item.id);
-                return (
-                  <View
-                    style={[
-                      styles.listBadgeItem,
-                      earned
-                        ? { backgroundColor: theme.primary }
-                        : styles.lockedBadge,
-                    ]}
-                  >
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Ionicons
-                        name={earned ? "trophy" : "lock-closed"}
-                        size={24}
-                        color={earned ? "#ffbf00" : "#636e72"}
-                        style={{ marginRight: 8 }}
-                      />
-                      <Text
-                        style={[
-                          styles.badgeName,
-                          earned && styles.earnedBadgeText,
-                          { fontSize: scaleFont(14) },
-                        ]}
-                      >
-                        {item.name}
-                      </Text>
-                    </View>
-                    <Text
-                      style={{
-                        fontSize: scaleFont(12),
-                        color: earned ? "#fff" : "#636e72",
-                        marginLeft: 32,
-                      }}
-                    >
-                      {item.description}
-                    </Text>
-                  </View>
-                );
-              }}
-            />
-            <TouchableOpacity
-              style={[
-                styles.modalCloseButton,
-                { marginTop: 10 },
-                { backgroundColor: theme.primary },
-              ]}
-              onPress={() => setBadgeListModalVisible(false)}
-            >
-              <Text
-                style={[styles.modalCloseText, { fontSize: scaleFont(14) }]}
+        {/* Courses Section */}
+        <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
+          Courses
+        </Text>
+
+        {disasterCategories.map((category) => {
+          const categoryTasks = tasks.filter((t) => t.category === category);
+          const categoryQuiz = quizzes.find((q) => q.category === category);
+          const { percentage } = calculateCategoryProgress({
+            category,
+            tasks,
+            quizzes,
+            completedTasks: userProgress.completedTasks.map((t) => t.id),
+            completedQuizzes: userProgress.completedQuizzes.map((q) => q.id),
+          });
+
+          return (
+            <View key={category} style={styles.disasterSection}>
+              <TouchableOpacity
+                style={styles.disasterHeader}
+                onPress={() => toggleCollapse(category)}
               >
-                Close
+                <Ionicons
+                  name={disasterIcons[category]}
+                  size={24}
+                  color={theme.primary}
+                />
+                <Text
+                  style={[styles.disasterTitle, { fontSize: scaleFont(16) }]}
+                >
+                  {category.toUpperCase()}
+                </Text>
+                <Ionicons
+                  name={collapsed[category] ? "chevron-down" : "chevron-up"}
+                  size={24}
+                  color="#636e72"
+                />
+              </TouchableOpacity>
+
+              <View style={styles.progressBar}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    { width: `${percentage}%` },
+                    { backgroundColor: theme.primary },
+                  ]}
+                />
+              </View>
+              <Text style={[styles.progressSub, { fontSize: scaleFont(12) }]}>
+                {percentage}% completed
               </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
-      {/* Courses Section */}
-      <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
-        Courses
-      </Text>
+              {!collapsed[category] && (
+                <View style={styles.disasterContent}>
+                  {categoryTasks.map((task) => {
+                    const bgColor = theme.secondary;
+                    const textColor = "#fff";
+                    return (
+                      <TouchableOpacity
+                        key={task.id}
+                        style={[styles.card, { backgroundColor: bgColor }]}
+                        onPress={() =>
+                          navigation.navigate("TaskScreen", {
+                            id: task.id,
+                            type: "task",
+                            taskType: task.taskType,
+                          })
+                        }
+                      >
+                        <Text
+                          style={[
+                            styles.cardTitle,
+                            { color: textColor, fontSize: scaleFont(15) },
+                          ]}
+                        >
+                          {task.title} ({task.taskType})
+                        </Text>
+                        <Text
+                          style={[
+                            styles.cardDesc,
+                            { color: textColor, fontSize: scaleFont(13) },
+                          ]}
+                        >
+                          {task.description}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
 
-      {disasterCategories.map((category) => {
-        const categoryTasks = tasks.filter((t) => t.category === category);
-        const categoryQuiz = quizzes.find((q) => q.category === category);
-        const { percentage } = calculateCategoryProgress({
-          category,
-          tasks,
-          quizzes,
-          completedTasks: userProgress.completedTasks.map((t) => t.id),
-          completedQuizzes: userProgress.completedQuizzes.map((q) => q.id),
-        });
-
-        return (
-          <View key={category} style={styles.disasterSection}>
-            <TouchableOpacity
-              style={styles.disasterHeader}
-              onPress={() => toggleCollapse(category)}
-            >
-              <Ionicons
-                name={disasterIcons[category]}
-                size={24}
-                color={theme.primary}
-              />
-              <Text style={[styles.disasterTitle, { fontSize: scaleFont(16) }]}>
-                {category.toUpperCase()}
-              </Text>
-              <Ionicons
-                name={collapsed[category] ? "chevron-down" : "chevron-up"}
-                size={24}
-                color="#636e72"
-              />
-            </TouchableOpacity>
-
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  { width: `${percentage}%` },
-                  { backgroundColor: theme.primary },
-                ]}
-              />
-            </View>
-            <Text style={[styles.progressSub, { fontSize: scaleFont(12) }]}>
-              {percentage}% completed
-            </Text>
-
-            {!collapsed[category] && (
-              <View style={styles.disasterContent}>
-                {categoryTasks.map((task) => {
-                  const bgColor = theme.secondary;
-                  const textColor = "#fff";
-                  return (
+                  {categoryQuiz && (
                     <TouchableOpacity
-                      key={task.id}
-                      style={[styles.card, { backgroundColor: bgColor }]}
-                      onPress={() =>
-                        navigation.navigate("TaskScreen", {
-                          id: task.id,
-                          type: "task",
-                          taskType: task.taskType,
-                        })
-                      }
+                      style={[
+                        styles.quizCard,
+                        { backgroundColor: theme.primary },
+                      ]}
+                      onPress={() => handleQuizPress(categoryQuiz, category)}
                     >
+                      <Ionicons name="document-text" size={20} color="#fff" />
                       <Text
-                        style={[
-                          styles.cardTitle,
-                          { color: textColor, fontSize: scaleFont(15) },
-                        ]}
+                        style={[styles.quizTitle, { fontSize: scaleFont(15) }]}
                       >
-                        {task.title} ({task.taskType})
-                      </Text>
-                      <Text
-                        style={[
-                          styles.cardDesc,
-                          { color: textColor, fontSize: scaleFont(13) },
-                        ]}
-                      >
-                        {task.description}
+                        {categoryQuiz.title}
                       </Text>
                     </TouchableOpacity>
-                  );
-                })}
-
-                {categoryQuiz && (
-                  <TouchableOpacity
-                    style={[
-                      styles.quizCard,
-                      { backgroundColor: theme.primary },
-                    ]}
-                    onPress={() => handleQuizPress(categoryQuiz, category)}
-                  >
-                    <Ionicons name="document-text" size={20} color="#fff" />
-                    <Text
-                      style={[styles.quizTitle, { fontSize: scaleFont(15) }]}
-                    >
-                      {categoryQuiz.title}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            )}
-          </View>
-        );
-      })}
-    </ScrollView>
+                  )}
+                </View>
+              )}
+            </View>
+          );
+        })}
+      </ScrollView>
+      {/* Bottom Navigation Bar */}
+      <BottomNavigation activeKey="PreparednessZone" />
+    </View>
   );
 }
 
 // Styles (one property per line)
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    backgroundColor: "#f5f6fa",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f5f6fa",
   },
   scrollContent: {
     padding: 20,
-    paddingBottom: 50,
+    paddingBottom: 120,
   },
   sectionTitle: {
     fontSize: 20,

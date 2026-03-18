@@ -17,6 +17,7 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import BottomNavigation from "../helpers/bottomNavigation";
 
 import {
   sendNotification,
@@ -145,168 +146,179 @@ export default function EmergencyMode() {
   const f = (size) => scaleFont(size);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Current Emergency */}
-      {currentAlert && (
-        <View style={styles.alertBox}>
-          <Text style={[styles.emergencyHeader, { fontSize: f(24) }]}>
-            EMERGENCY MODE
-          </Text>
-          <Text style={[styles.alertTitle, { fontSize: f(20) }]}>
-            {currentAlert.title}
-          </Text>
-          <Text style={[styles.alertMessage, { fontSize: f(16) }]}>
-            {currentAlert.message}
-          </Text>
-
-          <View style={styles.instructionsBox}>
-            <Text style={[styles.instructionsTitle, { fontSize: f(16) }]}>
-              What you should do:
+    <View style={styles.screenContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Current Emergency */}
+        {currentAlert && (
+          <View style={styles.alertBox}>
+            <Text style={[styles.emergencyHeader, { fontSize: f(24) }]}>
+              EMERGENCY MODE
             </Text>
-            {getEmergencyInstructions(currentAlert).map((step, index) => (
-              <Text
-                key={index}
-                style={[styles.instructionItem, { fontSize: f(14) }]}
-              >
-                {index + 1}. {step}
+            <Text style={[styles.alertTitle, { fontSize: f(20) }]}>
+              {currentAlert.title}
+            </Text>
+            <Text style={[styles.alertMessage, { fontSize: f(16) }]}>
+              {currentAlert.message}
+            </Text>
+
+            <View style={styles.instructionsBox}>
+              <Text style={[styles.instructionsTitle, { fontSize: f(16) }]}>
+                What you should do:
               </Text>
-            ))}
-          </View>
-        </View>
-      )}
-
-      {/* No Emergency Status Card */}
-      {!currentAlert && (
-        <View style={styles.noAlertBox}>
-          <Ionicons
-            name="shield-checkmark"
-            size={40}
-            color={currentTheme.primary}
-          />
-          <Text style={[styles.noAlertTitle, { fontSize: f(18) }]}>
-            No Active Emergencies
-          </Text>
-          <Text style={[styles.noAlertText, { fontSize: f(14) }]}>
-            Everything is currently safe. You can simulate an emergency to
-            practice your response.
-          </Text>
-        </View>
-      )}
-
-      {/* Location Display */}
-      <Text style={[styles.subtitle, { fontSize: f(18) }]}>
-        Detected Location:
-      </Text>
-      {loadingLocation ? (
-        <ActivityIndicator size="small" color={currentTheme.primary} />
-      ) : deviceCountry ? (
-        <Text style={[styles.locationText, { fontSize: f(16) }]}>
-          {deviceCountry}
-        </Text>
-      ) : (
-        <>
-          <Text style={[styles.locationText, { fontSize: f(16) }]}>
-            {locationTimeout
-              ? "Can't find your location, select your country"
-              : "No location detected"}
-          </Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedCountry}
-              onValueChange={setSelectedCountry}
-            >
-              <Picker.Item label="Select country" value="" />
-              {allowedCountries.map((c) => (
-                <Picker.Item key={c} label={c} value={c} />
-              ))}
-            </Picker>
-          </View>
-        </>
-      )}
-
-      {/* Action Buttons */}
-      <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: currentTheme.primary }]}
-        onPress={simulateEmergency}
-      >
-        <View style={styles.buttonRow}>
-          <Ionicons name="alert-circle" size={20} color="#fff" />
-          <Text style={[styles.buttonText, { fontSize: f(16) }]}>
-            Simulate Emergency
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: "#636e72" }]}
-        onPress={clearEmergency}
-      >
-        <View style={styles.buttonRow}>
-          <Ionicons name="checkmark-circle" size={20} color="#fff" />
-          <Text style={[styles.buttonText, { fontSize: f(16) }]}>
-            Clear Emergency
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: "#d35400" }]}
-        onPress={openEmergencyModal}
-      >
-        <View style={styles.buttonRow}>
-          <Ionicons name="call" size={20} color="#fff" />
-          <Text style={[styles.buttonText, { fontSize: f(16) }]}>
-            Call Emergency Services
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Emergency Contacts Modal */}
-      <Modal
-        animationType="slide"
-        transparent
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={[styles.modalTitle, { fontSize: f(18) }]}>
-              Emergency Contacts for {country}
-            </Text>
-            <ScrollView style={{ maxHeight: 250 }}>
-              {modalContacts.map((contact, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={styles.modalItem}
-                  onPress={() => callNumber(contact.number)}
+              {getEmergencyInstructions(currentAlert).map((step, index) => (
+                <Text
+                  key={index}
+                  style={[styles.instructionItem, { fontSize: f(14) }]}
                 >
-                  <Text style={[styles.modalItemText, { fontSize: f(16) }]}>
-                    {contact.name} – {contact.number}
-                  </Text>
-                </TouchableOpacity>
+                  {index + 1}. {step}
+                </Text>
               ))}
-            </ScrollView>
-            <TouchableOpacity
-              style={[styles.actionButton, { marginTop: 10 }]}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={[styles.buttonText, { fontSize: f(16) }]}>
-                Close
-              </Text>
-            </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Modal>
-    </ScrollView>
+        )}
+
+        {/* No Emergency Status Card */}
+        {!currentAlert && (
+          <View style={styles.noAlertBox}>
+            <Ionicons
+              name="shield-checkmark"
+              size={40}
+              color={currentTheme.primary}
+            />
+            <Text style={[styles.noAlertTitle, { fontSize: f(18) }]}>
+              No Active Emergencies
+            </Text>
+            <Text style={[styles.noAlertText, { fontSize: f(14) }]}>
+              Everything is currently safe. You can simulate an emergency to
+              practice your response.
+            </Text>
+          </View>
+        )}
+
+        {/* Location Display */}
+        <Text style={[styles.subtitle, { fontSize: f(18) }]}>
+          Detected Location:
+        </Text>
+        {loadingLocation ? (
+          <ActivityIndicator size="small" color={currentTheme.primary} />
+        ) : deviceCountry ? (
+          <Text style={[styles.locationText, { fontSize: f(16) }]}>
+            {deviceCountry}
+          </Text>
+        ) : (
+          <>
+            <Text style={[styles.locationText, { fontSize: f(16) }]}>
+              {locationTimeout
+                ? "Can't find your location, select your country"
+                : "No location detected"}
+            </Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={selectedCountry}
+                onValueChange={setSelectedCountry}
+              >
+                <Picker.Item label="Select country" value="" />
+                {allowedCountries.map((c) => (
+                  <Picker.Item key={c} label={c} value={c} />
+                ))}
+              </Picker>
+            </View>
+          </>
+        )}
+
+        {/* Action Buttons */}
+        <TouchableOpacity
+          style={[
+            styles.actionButton,
+            { backgroundColor: currentTheme.primary },
+          ]}
+          onPress={simulateEmergency}
+        >
+          <View style={styles.buttonRow}>
+            <Ionicons name="alert-circle" size={20} color="#fff" />
+            <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+              Simulate Emergency
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.actionButton, { backgroundColor: "#636e72" }]}
+          onPress={clearEmergency}
+        >
+          <View style={styles.buttonRow}>
+            <Ionicons name="checkmark-circle" size={20} color="#fff" />
+            <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+              Clear Emergency
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.actionButton, { backgroundColor: "#d35400" }]}
+          onPress={openEmergencyModal}
+        >
+          <View style={styles.buttonRow}>
+            <Ionicons name="call" size={20} color="#fff" />
+            <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+              Call Emergency Services
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* Emergency Contacts Modal */}
+        <Modal
+          animationType="slide"
+          transparent
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={[styles.modalTitle, { fontSize: f(18) }]}>
+                Emergency Contacts for {country}
+              </Text>
+              <ScrollView style={{ maxHeight: 250 }}>
+                {modalContacts.map((contact, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    style={styles.modalItem}
+                    onPress={() => callNumber(contact.number)}
+                  >
+                    <Text style={[styles.modalItemText, { fontSize: f(16) }]}>
+                      {contact.name} – {contact.number}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+              <TouchableOpacity
+                style={[styles.actionButton, { marginTop: 10 }]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+                  Close
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
+
+      {/* Bottom Navigation Bar (sticky) */}
+            <BottomNavigation activeKey="EmergencyMode" />
+    </View>
   );
 }
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
+  screenContainer: {
+    flex: 1,
     backgroundColor: "#f5f6fa",
+  },
+  scrollContainer: {
+    padding: 20,
+    paddingBottom: 80,
   },
 
   /* Emergency Alert */

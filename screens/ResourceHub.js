@@ -27,6 +27,7 @@ import {
 } from "../helpers/resourceHelper";
 
 import { ThemeContext } from "../helpers/themeContext";
+import BottomNavigation from "../helpers/bottomNavigation";
 
 const RESOURCE_OPTIONS = [
   {
@@ -99,230 +100,253 @@ export default function ResourceHub() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* LOCATION */}
-      <TouchableOpacity
-        style={[
-          styles.locationCard,
-          { backgroundColor: theme.accent, borderColor: theme.secondary },
-        ]}
-        onPress={() => {
-          setLocationModal(true);
-          setStep("country");
-        }}
-      >
-        <Text style={styles.locationLabel}>Current Location:</Text>
-        <Text style={[styles.locationText, { color: theme.primary }]}>
-          {country && state ? `${state}, ${country}` : "Select Location"}
-        </Text>
-      </TouchableOpacity>
+    <View style={styles.screenContainer}>
+      <ScrollView contentContainerStyle={styles.scrollingContainer}>
+        {/* LOCATION */}
+        <TouchableOpacity
+          style={[
+            styles.locationCard,
+            { backgroundColor: theme.accent, borderColor: theme.secondary },
+          ]}
+          onPress={() => {
+            setLocationModal(true);
+            setStep("country");
+          }}
+        >
+          <Text style={styles.locationLabel}>Current Location:</Text>
+          <Text style={[styles.locationText, { color: theme.primary }]}>
+            {country && state ? `${state}, ${country}` : "Select Location"}
+          </Text>
+        </TouchableOpacity>
 
-      {/* INFO */}
-      <View
-        style={[
-          styles.infoCard,
-          { backgroundColor: theme.accent, borderColor: theme.secondary },
-        ]}
-      >
-        <View style={styles.infoRow}>
-          <Ionicons name="warning-outline" size={28} color={theme.primary} />
-          <Text style={styles.infoTitle}>Stay Prepared</Text>
-        </View>
-        <Text style={styles.infoText}>
-          Access emergency contacts, shelters, safety guides, and disaster
-          information quickly.
-        </Text>
-      </View>
-
-      {/* BUTTONS */}
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {RESOURCE_OPTIONS.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[styles.resourceButton, { backgroundColor: theme.primary }]}
-            onPress={() => openResource(item.type)}
-          >
-            <Ionicons name={item.icon} size={28} color="#fff" />
-            <View style={styles.resourceText}>
-              <Text style={styles.resourceTitle}>{item.title}</Text>
-              <Text style={styles.resourceSubtitle}>{item.sub}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-
-        <View style={styles.instructionCard}>
-          <Text style={styles.instructionText}>
-            Tap any button above to view emergency resources
+        {/* INFO */}
+        <View
+          style={[
+            styles.infoCard,
+            { backgroundColor: theme.accent, borderColor: theme.secondary },
+          ]}
+        >
+          <View style={styles.infoRow}>
+            <Ionicons name="warning-outline" size={28} color={theme.primary} />
+            <Text style={styles.infoTitle}>Stay Prepared</Text>
+          </View>
+          <Text style={styles.infoText}>
+            Access emergency contacts, shelters, safety guides, and disaster
+            information quickly.
           </Text>
         </View>
-      </ScrollView>
 
-      {/* LOCATION MODAL */}
-      <Modal visible={locationModal} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>
-            {step === "country" ? "Select Country" : "Select Area"}
-          </Text>
-
-          {step === "country" &&
-            countries.map((c) => (
-              <TouchableOpacity
-                key={c}
-                style={[styles.countryCard, { backgroundColor: theme.accent }]}
-                onPress={() => {
-                  setCountry(c);
-                  setStep("state");
-                }}
-              >
-                <Text style={styles.countryText}>{c}</Text>
-              </TouchableOpacity>
-            ))}
-
-          {step === "state" &&
-            states.map((s) => (
-              <TouchableOpacity
-                key={s}
-                style={[styles.countryCard, { backgroundColor: theme.accent }]}
-                onPress={() => {
-                  setState(s);
-                  saveLocation(country, s);
-                  setLocationModal(false);
-                }}
-              >
-                <Text style={styles.countryText}>{s}</Text>
-              </TouchableOpacity>
-            ))}
-
-          {step === "state" && (
+        {/* BUTTONS */}
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {RESOURCE_OPTIONS.map((item, index) => (
             <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => setStep("country")}
+              key={index}
+              style={[
+                styles.resourceButton,
+                { backgroundColor: theme.primary },
+              ]}
+              onPress={() => openResource(item.type)}
+            >
+              <Ionicons name={item.icon} size={28} color="#fff" />
+              <View style={styles.resourceText}>
+                <Text style={styles.resourceTitle}>{item.title}</Text>
+                <Text style={styles.resourceSubtitle}>{item.sub}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+
+          <View style={styles.instructionCard}>
+            <Text style={styles.instructionText}>
+              Tap any button above to view emergency resources
+            </Text>
+          </View>
+        </ScrollView>
+
+        {/* LOCATION MODAL */}
+        <Modal visible={locationModal} animationType="slide">
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>
+              {step === "country" ? "Select Country" : "Select Area"}
+            </Text>
+
+            {step === "country" &&
+              countries.map((c) => (
+                <TouchableOpacity
+                  key={c}
+                  style={[
+                    styles.countryCard,
+                    { backgroundColor: theme.accent },
+                  ]}
+                  onPress={() => {
+                    setCountry(c);
+                    setStep("state");
+                  }}
+                >
+                  <Text style={styles.countryText}>{c}</Text>
+                </TouchableOpacity>
+              ))}
+
+            {step === "state" &&
+              states.map((s) => (
+                <TouchableOpacity
+                  key={s}
+                  style={[
+                    styles.countryCard,
+                    { backgroundColor: theme.accent },
+                  ]}
+                  onPress={() => {
+                    setState(s);
+                    saveLocation(country, s);
+                    setLocationModal(false);
+                  }}
+                >
+                  <Text style={styles.countryText}>{s}</Text>
+                </TouchableOpacity>
+              ))}
+
+            {step === "state" && (
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => setStep("country")}
+              >
+                <Ionicons name="arrow-back" size={26} color={theme.primary} />
+                <Text style={styles.backText}>Back</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </Modal>
+
+        {/* RESOURCE MODAL */}
+        <Modal visible={resourceModal} animationType="slide">
+          <View style={styles.modalContainerFull}>
+            <TouchableOpacity
+              style={styles.backButtonModal}
+              onPress={() => setResourceModal(false)}
             >
               <Ionicons name="arrow-back" size={26} color={theme.primary} />
               <Text style={styles.backText}>Back</Text>
             </TouchableOpacity>
-          )}
-        </View>
-      </Modal>
 
-      {/* RESOURCE MODAL */}
-      <Modal visible={resourceModal} animationType="slide">
-        <View style={styles.modalContainerFull}>
-          <TouchableOpacity
-            style={styles.backButtonModal}
-            onPress={() => setResourceModal(false)}
-          >
-            <Ionicons name="arrow-back" size={26} color={theme.primary} />
-            <Text style={styles.backText}>Back</Text>
-          </TouchableOpacity>
+            <TextInput
+              style={[
+                styles.searchInput,
+                {
+                  backgroundColor: theme.accent,
+                  borderColor: theme.secondary,
+                  color: theme.text,
+                },
+              ]}
+              placeholder=" Search..."
+              value={searchText}
+              onChangeText={setSearchText}
+            />
 
-          <TextInput
-            style={[
-              styles.searchInput,
-              {
-                backgroundColor: theme.accent,
-                borderColor: theme.secondary,
-                color: theme.text,
-              },
-            ]}
-            placeholder=" Search..."
-            value={searchText}
-            onChangeText={setSearchText}
-          />
-
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            {resourceType === "contacts" &&
-              emergencyContacts
-                .filter((i) => filterResource(i, "contacts", searchText))
-                .map((i, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={[
-                      styles.card,
-                      {
-                        backgroundColor: theme.accent,
-                        borderColor: theme.secondary,
-                      },
-                    ]}
-                    onPress={() => callNumber(i.number)}
-                  >
-                    <Text style={styles.cardTitle}>{i.name}</Text>
-                    <Text style={[styles.cardAction, { color: theme.primary }]}>
-                      {i.number}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-
-            {resourceType === "shelters" &&
-              shelters
-                .filter((s) => filterResource(s, "shelters", searchText))
-                .map((s) => (
-                  <TouchableOpacity
-                    key={s.id}
-                    style={[
-                      styles.card,
-                      {
-                        backgroundColor: theme.accent,
-                        borderColor: theme.secondary,
-                      },
-                    ]}
-                    onPress={() => openMap(s.address)}
-                  >
-                    <Text style={styles.cardTitle}>{s.name}</Text>
-                    <Text style={styles.cardText}>{s.address}</Text>
-                  </TouchableOpacity>
-                ))}
-
-            {resourceType === "disasterInfo" &&
-              disasterInfo
-                .filter((d) => filterResource(d, "disasterInfo", searchText))
-                .map((d) => (
-                  <View
-                    key={d.id}
-                    style={[
-                      styles.card,
-                      {
-                        backgroundColor: theme.accent,
-                        borderColor: theme.secondary,
-                      },
-                    ]}
-                  >
-                    <Text style={styles.cardTitle}>{d.title}</Text>
-                    {d.instructions.map((inst, i) => (
-                      <Text key={i} style={styles.bullet}>
-                        - {inst}
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+              {resourceType === "contacts" &&
+                emergencyContacts
+                  .filter((i) => filterResource(i, "contacts", searchText))
+                  .map((i, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={[
+                        styles.card,
+                        {
+                          backgroundColor: theme.accent,
+                          borderColor: theme.secondary,
+                        },
+                      ]}
+                      onPress={() => callNumber(i.number)}
+                    >
+                      <Text style={styles.cardTitle}>{i.name}</Text>
+                      <Text
+                        style={[styles.cardAction, { color: theme.primary }]}
+                      >
+                        {i.number}
                       </Text>
-                    ))}
-                  </View>
-                ))}
+                    </TouchableOpacity>
+                  ))}
 
-            {resourceType === "disasters" &&
-              disasterInfo
-                .filter((d) => filterResource(d, "disasters", searchText))
-                .map((d) => (
-                  <View
-                    key={d.id}
-                    style={[
-                      styles.card,
-                      {
-                        backgroundColor: theme.accent,
-                        borderColor: theme.secondary,
-                      },
-                    ]}
-                  >
-                    <Text style={styles.cardTitle}>{d.title}</Text>
-                    <Text style={styles.cardText}>{d.description}</Text>
-                  </View>
-                ))}
-          </ScrollView>
-        </View>
-      </Modal>
+              {resourceType === "shelters" &&
+                shelters
+                  .filter((s) => filterResource(s, "shelters", searchText))
+                  .map((s) => (
+                    <TouchableOpacity
+                      key={s.id}
+                      style={[
+                        styles.card,
+                        {
+                          backgroundColor: theme.accent,
+                          borderColor: theme.secondary,
+                        },
+                      ]}
+                      onPress={() => openMap(s.address)}
+                    >
+                      <Text style={styles.cardTitle}>{s.name}</Text>
+                      <Text style={styles.cardText}>{s.address}</Text>
+                    </TouchableOpacity>
+                  ))}
+
+              {resourceType === "disasterInfo" &&
+                disasterInfo
+                  .filter((d) => filterResource(d, "disasterInfo", searchText))
+                  .map((d) => (
+                    <View
+                      key={d.id}
+                      style={[
+                        styles.card,
+                        {
+                          backgroundColor: theme.accent,
+                          borderColor: theme.secondary,
+                        },
+                      ]}
+                    >
+                      <Text style={styles.cardTitle}>{d.title}</Text>
+                      {d.instructions.map((inst, i) => (
+                        <Text key={i} style={styles.bullet}>
+                          - {inst}
+                        </Text>
+                      ))}
+                    </View>
+                  ))}
+
+              {resourceType === "disasters" &&
+                disasterInfo
+                  .filter((d) => filterResource(d, "disasters", searchText))
+                  .map((d) => (
+                    <View
+                      key={d.id}
+                      style={[
+                        styles.card,
+                        {
+                          backgroundColor: theme.accent,
+                          borderColor: theme.secondary,
+                        },
+                      ]}
+                    >
+                      <Text style={styles.cardTitle}>{d.title}</Text>
+                      <Text style={styles.cardText}>{d.description}</Text>
+                    </View>
+                  ))}
+            </ScrollView>
+          </View>
+        </Modal>
+      </ScrollView>
+
+      {/* Bottom Navigation Bar (sticky) */}
+      <BottomNavigation activeKey="ResourceHub" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f6fa" },
+  screenContainer: {
+    flex: 1,
+    backgroundColor: "#f5f6fa",
+  },
+  scrollingContainer: {
+    padding: 10,
+    paddingBottom: 120,
+  },
 
   scrollContainer: { paddingBottom: 30 },
 
