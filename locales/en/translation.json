@@ -1,0 +1,40 @@
+{
+  "homeTitle": "Resilio",
+  "preparednessZoneTitle": "Preparedness Zone",
+  "taskScreenTitle": "Task / Quiz",
+  "emergencyModeTitle": "Emergency Mode",
+  "resourceHubTitle": "Resource Hub",
+  "rewardsTitle": "Rewards Store",
+  "settingsTitle": "Settings",
+
+  "textSize": "Text Size",
+  "textSmall": "Small",
+  "textMedium": "Medium",
+  "textLarge": "Large",
+  "textExtraLarge": "Extra Large",
+
+  "subtitle": "Manage your account, notifications, and app preferences.",
+  "language": "Language",
+
+  "dangerZone": "Danger Zone",
+  "reset": "Reset",
+  "cancel": "Cancel",
+  "error": "Error",
+  "resetData": "Reset All App Data",
+  "resetting": "Resetting...",
+  "resetWarning": "Are you sure you want to reset all app data?",
+  "resetCompleteTitle": "Reset Complete",
+  "resetComplete": "All app data has been cleared.",
+  "resetError": "Failed to reset app data. Please try again.",
+  "resetDescription": "Reset all app data. This action will permanently clear ",
+  "resetBold": "points, earned badges, completed tasks and quizzes, rewards, and app preferences",
+  "resetDescription2": ". Once reset, this data cannot be recovered. Please proceed with caution.",
+  "languageBetaNotice": "Language translation is in beta. Some content may not be fully translated.",
+
+  "noCurrentEmergencies": "No current emergencies",
+  "preparednessProgress": "Preparedness Progress",
+  "activitiesCompleted": "activities completed",
+  "pointsEarned": "points earned",
+  "loadingProgress": "Loading progress…",
+  "comingSoon": "Coming Soon"
+}

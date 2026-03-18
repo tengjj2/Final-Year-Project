@@ -1,6 +1,6 @@
 // screens/HomeScreen.js
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,18 +10,46 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 import { getCurrentEmergency } from "../helpers/emergencyHelper";
 import { getUserProgress } from "../helpers/gamification";
 import { calculateProgress } from "../helpers/progressHelper";
 import tasks from "../data/tasks.json";
 import quizzes from "../data/quizzes.json";
+import { loadTheme, defaultTheme } from "../helpers/theme";
+import { ThemeContext } from "../helpers/themeContext";
+
+import {
+  loadFontSize,
+  scaleFont,
+  updateFontScale,
+} from "../helpers/fontHelper";
+import { loadLanguage } from "../helpers/languageHelper";
 
 export default function HomeScreen({ navigation }) {
+  const { t } = useTranslation();
+
   const [currentAlert, setCurrentAlert] = useState(getCurrentEmergency());
   const [progress, setProgress] = useState(null);
   const [points, setPoints] = useState(0);
+  const { theme } = useContext(ThemeContext);
 
+  // Load font size and language on mount
+  useEffect(() => {
+    const initializeSettings = async () => {
+      const size = await loadFontSize();
+      const lang = await loadLanguage();
+
+      updateFontScale(size);
+      i18n.changeLanguage(lang);
+    };
+
+    initializeSettings();
+  }, []);
+
+  // Update emergency alerts every second
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentAlert(getCurrentEmergency());
@@ -29,6 +57,7 @@ export default function HomeScreen({ navigation }) {
     return () => clearInterval(interval);
   }, []);
 
+  // Load user progress on focus
   useFocusEffect(
     useCallback(() => {
       const loadProgress = async () => {
@@ -58,16 +87,21 @@ export default function HomeScreen({ navigation }) {
         ]}
         onPress={() => navigation.navigate("EmergencyMode")}
       >
-        <Text style={styles.alertText}>
+        <Text style={[styles.alertText, { fontSize: scaleFont(16) }]}>
           {currentAlert
             ? `${currentAlert.title}: ${currentAlert.message}`
-            : "No current emergencies"}
+            : t("noCurrentEmergencies")}
         </Text>
       </TouchableOpacity>
 
       {/* Preparedness Dashboard */}
-      <View style={styles.dashboard}>
-        <Text style={styles.sectionTitle}>Preparedness Progress</Text>
+      <TouchableOpacity
+        style={styles.dashboard}
+        onPress={() => navigation.navigate("PreparednessZone")}
+      >
+        <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
+          {t("preparednessProgress")}
+        </Text>
 
         {progress ? (
           <>
@@ -75,27 +109,34 @@ export default function HomeScreen({ navigation }) {
               <View
                 style={[
                   styles.progressBarFill,
-                  { width: `${progress.percentage}%` },
+                  {
+                    width: `${progress.percentage}%`,
+                    backgroundColor: theme.primary,
+                  },
                 ]}
               />
             </View>
 
-            <Text style={styles.progressText}>
+            <Text style={[styles.progressText, { fontSize: scaleFont(14) }]}>
               {progress.completedActivities} / {progress.totalActivities}{" "}
-              activities completed
+              {t("activitiesCompleted")}
             </Text>
 
-            <Text style={styles.pointsText}>⭐ {points} points earned</Text>
+            <Text style={[styles.pointsText, { fontSize: scaleFont(14) }]}>
+              {points} {t("pointsEarned")}
+            </Text>
           </>
         ) : (
-          <Text style={styles.progressText}>Loading progress…</Text>
+          <Text style={[styles.progressText, { fontSize: scaleFont(14) }]}>
+            {t("loadingProgress")}
+          </Text>
         )}
-      </View>
+      </TouchableOpacity>
 
       {/* Action Grid */}
       <View style={styles.grid}>
         <TouchableOpacity
-          style={styles.gridItem}
+          style={[styles.gridItem, { backgroundColor: theme.primary }]}
           onPress={() => navigation.navigate("PreparednessZone")}
         >
           <Ionicons
@@ -104,11 +145,13 @@ export default function HomeScreen({ navigation }) {
             color="#fff"
             style={styles.gridIcon}
           />
-          <Text style={styles.gridText}>Preparedness Zone</Text>
+          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+            {t("preparednessZoneTitle")}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.gridItem}
+          style={[styles.gridItem, { backgroundColor: theme.primary }]}
           onPress={() => navigation.navigate("ResourceHub")}
         >
           <Ionicons
@@ -117,7 +160,9 @@ export default function HomeScreen({ navigation }) {
             color="#fff"
             style={styles.gridIcon}
           />
-          <Text style={styles.gridText}>Resource Hub</Text>
+          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+            {t("resourceHubTitle")}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -130,11 +175,13 @@ export default function HomeScreen({ navigation }) {
             color="#fff"
             style={styles.gridIcon}
           />
-          <Text style={styles.gridText}>Emergency Mode</Text>
+          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+            {t("emergencyModeTitle")}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.gridItem}
+          style={[styles.gridItem, { backgroundColor: theme.primary }]}
           onPress={() => navigation.navigate("Rewards")}
         >
           <Ionicons
@@ -143,11 +190,15 @@ export default function HomeScreen({ navigation }) {
             color="#fff"
             style={styles.gridIcon}
           />
-          <Text style={styles.gridText}>Rewards</Text>
+          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+            {t("rewardsTitle")}
+          </Text>
         </TouchableOpacity>
 
         <View style={[styles.gridItem, styles.disabledGrid]}>
-          <Text style={styles.disabledText}>Coming Soon</Text>
+          <Text style={[styles.disabledText, { fontSize: scaleFont(14) }]}>
+            {t("comingSoon")}
+          </Text>
         </View>
 
         <TouchableOpacity
@@ -160,14 +211,15 @@ export default function HomeScreen({ navigation }) {
             color="#fff"
             style={styles.gridIcon}
           />
-          <Text style={styles.gridText}>Settings</Text>
+          <Text style={[styles.gridText, { fontSize: scaleFont(14) }]}>
+            {t("settingsTitle")}
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -197,7 +249,6 @@ const styles = StyleSheet.create({
   },
   alertText: {
     fontWeight: "600",
-    fontSize: 16,
     textAlign: "center",
   },
 
@@ -210,7 +261,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   sectionTitle: {
-    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
     color: "#2d3436",
@@ -225,16 +275,14 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: "100%",
-    backgroundColor: "#0f8f84", // teal theme
+    backgroundColor: "#0f8f84",
     borderRadius: 3,
   },
   progressText: {
-    fontSize: 14,
     marginBottom: 5,
     color: "#2d3436",
   },
   pointsText: {
-    fontSize: 14,
     fontWeight: "600",
     color: "#2d3436",
   },
@@ -248,7 +296,6 @@ const styles = StyleSheet.create({
   gridItem: {
     width: "30%",
     aspectRatio: 1,
-    backgroundColor: "#0f8f84",
     borderRadius: 16,
     marginBottom: 15,
     justifyContent: "center",

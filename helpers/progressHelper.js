@@ -47,3 +47,20 @@ export function calculateCategoryProgress({
 
   return { category, total, completed, percentage };
 }
+
+/**
+ * Initialize collapse state for disaster categories
+ * @param {Array} tasks - list of tasks
+ * @param {Array} quizzes - list of quizzes
+ * @returns {Object} - object mapping category => true
+ */
+export function initCollapseState(tasks, quizzes) {
+  const categories = [
+    ...new Set([...tasks, ...quizzes].map((item) => item.category)),
+  ];
+  const initialCollapse = {};
+  categories.forEach((cat) => {
+    initialCollapse[cat] = true;
+  });
+  return initialCollapse;
+}

@@ -1,5 +1,5 @@
 // screens/PreparednessZone.js
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -17,12 +17,20 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import tasks from "../data/tasks.json";
 import quizzes from "../data/quizzes.json";
 import badgesData from "../data/badges.json";
+import { ThemeContext } from "../helpers/themeContext";
 
-import { getUserProgress } from "../helpers/gamification";
 import {
   calculateProgress,
   calculateCategoryProgress,
+  initCollapseState,
 } from "../helpers/progressHelper";
+import { getUserProgress, canAttemptQuiz } from "../helpers/gamification";
+
+import {
+  loadFontSize,
+  scaleFont,
+  updateFontScale,
+} from "../helpers/fontHelper";
 
 export default function PreparednessZone({ navigation }) {
   const [progress, setProgress] = useState({ percentage: 0 });
@@ -34,11 +42,22 @@ export default function PreparednessZone({ navigation }) {
     badges: [],
     points: 0,
   });
-
   const [collapsed, setCollapsed] = useState({});
   const [badgeModalVisible, setBadgeModalVisible] = useState(false);
   const [badgeListModalVisible, setBadgeListModalVisible] = useState(false);
   const [selectedBadge, setSelectedBadge] = useState(null);
+  const [fontLoaded, setFontLoaded] = useState(false);
+  const { theme } = useContext(ThemeContext);
+
+  // Load font size from storage
+  useEffect(() => {
+    const initializeFont = async () => {
+      const size = await loadFontSize();
+      updateFontScale(size);
+      setFontLoaded(true);
+    };
+    initializeFont();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -57,12 +76,7 @@ export default function PreparednessZone({ navigation }) {
         setProgress(calculated || { percentage: 0 });
 
         // collapse state for disaster categories
-        const categories = [
-          ...new Set([...tasks, ...quizzes].map((item) => item.category)),
-        ];
-        const initialCollapse = {};
-        categories.forEach((cat) => (initialCollapse[cat] = true));
-        setCollapsed(initialCollapse);
+        setCollapsed(initCollapseState(tasks, quizzes));
       };
       loadProgress();
     }, []),
@@ -80,7 +94,10 @@ export default function PreparednessZone({ navigation }) {
   };
 
   const toggleCollapse = (category) => {
-    setCollapsed((prev) => ({ ...prev, [category]: !prev[category] }));
+    setCollapsed((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
   };
 
   const disasterCategories = [
@@ -93,13 +110,7 @@ export default function PreparednessZone({ navigation }) {
   };
 
   const handleQuizPress = (quiz, category) => {
-    const categoryTasks = tasks.filter((t) => t.category === category);
-    const completedTaskIds = userProgress.completedTasks.map((t) => t.id);
-    const allTasksCompleted = categoryTasks.every((task) =>
-      completedTaskIds.includes(task.id),
-    );
-
-    if (!allTasksCompleted) {
+    if (!canAttemptQuiz(category, userProgress, tasks)) {
       Alert.alert(
         "Complete all tasks first",
         `You need to complete all tasks for ${category.toUpperCase()} before attempting the final quiz.`,
@@ -110,6 +121,11 @@ export default function PreparednessZone({ navigation }) {
     navigation.navigate("TaskScreen", { id: quiz.id, type: "quiz" });
   };
 
+  // wait for font to load
+  if (!fontLoaded) {
+    return null;
+  }
+
   return (
     <ScrollView
       style={styles.container}
@@ -117,29 +133,71 @@ export default function PreparednessZone({ navigation }) {
     >
       {/* Progress Section */}
       <View style={styles.sectionHeaderRow}>
-        <Text style={styles.sectionTitle}>Progress</Text>
+        <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
+          Progress
+        </Text>
+
+        {/* Rewards Button */}
+        <TouchableOpacity
+          style={{ padding: 4 }}
+          onPress={() => navigation.navigate("Rewards")}
+        >
+          <Text
+            style={[
+              styles.viewAllText,
+              { fontSize: scaleFont(14), color: theme.primary },
+            ]}
+          >
+            Rewards
+          </Text>
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.progressBox}>
-        <Text style={styles.progressLabel}>
+      <View
+        style={[
+          styles.progressBox,
+          {
+            backgroundColor: theme.accent,
+            borderColor: theme.secondary,
+          },
+        ]}
+      >
+        <Text style={[styles.progressLabel, { fontSize: scaleFont(14) }]}>
           {progress.percentage || 0}% of all tasks and quizzes completed.
         </Text>
+
         <View style={styles.progressBar}>
           <View
             style={[
               styles.progressFill,
-              { width: `${progress.percentage || 0}%` },
+              {
+                width: `${progress.percentage || 0}%`,
+                backgroundColor: theme.primary,
+              },
             ]}
           />
         </View>
-        <Text style={styles.pointsText}>Points: {points || 0}</Text>
+
+        <Text style={[styles.pointsText, { fontSize: scaleFont(14) }]}>
+          Points: {points || 0}
+        </Text>
       </View>
 
       {/* Badges Section */}
       <View style={styles.sectionHeaderRow}>
-        <Text style={styles.sectionTitle}>Badges</Text>
+        <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
+          Badges
+        </Text>
+
         <TouchableOpacity onPress={() => setBadgeListModalVisible(true)}>
-          <Text style={styles.viewAllText}>View All</Text>
+          <Text
+            style={[
+              styles.viewAllText,
+              { fontSize: scaleFont(14), color: theme.primary },
+            ]}
+          >
+            View All
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -156,6 +214,7 @@ export default function PreparednessZone({ navigation }) {
               style={[
                 styles.badgeItem,
                 earned ? styles.earnedBadge : styles.lockedBadge,
+                earned && { backgroundColor: theme.primary },
               ]}
               activeOpacity={0.7}
               onPress={() => openBadgeModal(item)}
@@ -166,7 +225,11 @@ export default function PreparednessZone({ navigation }) {
                 color={earned ? "#ffbf00" : "#636e72"}
               />
               <Text
-                style={[styles.badgeName, earned && styles.earnedBadgeText]}
+                style={[
+                  styles.badgeName,
+                  earned && styles.earnedBadgeText,
+                  { fontSize: scaleFont(14) },
+                ]}
               >
                 {item.name}
               </Text>
@@ -197,13 +260,24 @@ export default function PreparednessZone({ navigation }) {
                 }
                 style={{ marginBottom: 12 }}
               />
-              <Text style={styles.modalTitle}>{selectedBadge.name}</Text>
-              <Text style={styles.modalDesc}>{selectedBadge.description}</Text>
+              <Text style={[styles.modalTitle, { fontSize: scaleFont(20) }]}>
+                {selectedBadge.name}
+              </Text>
+              <Text style={[styles.modalDesc, { fontSize: scaleFont(14) }]}>
+                {selectedBadge.description}
+              </Text>
               <TouchableOpacity
-                style={styles.modalCloseButton}
+                style={[
+                  styles.modalCloseButton,
+                  { backgroundColor: theme.primary },
+                ]}
                 onPress={() => setBadgeModalVisible(false)}
               >
-                <Text style={styles.modalCloseText}>Close</Text>
+                <Text
+                  style={[styles.modalCloseText, { fontSize: scaleFont(14) }]}
+                >
+                  Close
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -221,7 +295,9 @@ export default function PreparednessZone({ navigation }) {
           <View
             style={[styles.modalContent, { width: "90%", maxHeight: "80%" }]}
           >
-            <Text style={styles.modalTitle}>All Badges</Text>
+            <Text style={[styles.modalTitle, { fontSize: scaleFont(20) }]}>
+              All Badges
+            </Text>
             <FlatList
               data={badgesData}
               keyExtractor={(item) => item.id}
@@ -231,7 +307,9 @@ export default function PreparednessZone({ navigation }) {
                   <View
                     style={[
                       styles.listBadgeItem,
-                      earned ? styles.earnedBadge : styles.lockedBadge,
+                      earned
+                        ? { backgroundColor: theme.primary }
+                        : styles.lockedBadge,
                     ]}
                   >
                     <View
@@ -247,6 +325,7 @@ export default function PreparednessZone({ navigation }) {
                         style={[
                           styles.badgeName,
                           earned && styles.earnedBadgeText,
+                          { fontSize: scaleFont(14) },
                         ]}
                       >
                         {item.name}
@@ -254,7 +333,7 @@ export default function PreparednessZone({ navigation }) {
                     </View>
                     <Text
                       style={{
-                        fontSize: 12,
+                        fontSize: scaleFont(12),
                         color: earned ? "#fff" : "#636e72",
                         marginLeft: 32,
                       }}
@@ -266,17 +345,27 @@ export default function PreparednessZone({ navigation }) {
               }}
             />
             <TouchableOpacity
-              style={[styles.modalCloseButton, { marginTop: 10 }]}
+              style={[
+                styles.modalCloseButton,
+                { marginTop: 10 },
+                { backgroundColor: theme.primary },
+              ]}
               onPress={() => setBadgeListModalVisible(false)}
             >
-              <Text style={styles.modalCloseText}>Close</Text>
+              <Text
+                style={[styles.modalCloseText, { fontSize: scaleFont(14) }]}
+              >
+                Close
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
       {/* Courses Section */}
-      <Text style={styles.sectionTitle}>Courses</Text>
+      <Text style={[styles.sectionTitle, { fontSize: scaleFont(20) }]}>
+        Courses
+      </Text>
 
       {disasterCategories.map((category) => {
         const categoryTasks = tasks.filter((t) => t.category === category);
@@ -298,9 +387,11 @@ export default function PreparednessZone({ navigation }) {
               <Ionicons
                 name={disasterIcons[category]}
                 size={24}
-                color="#0f8f84"
+                color={theme.primary}
               />
-              <Text style={styles.disasterTitle}>{category.toUpperCase()}</Text>
+              <Text style={[styles.disasterTitle, { fontSize: scaleFont(16) }]}>
+                {category.toUpperCase()}
+              </Text>
               <Ionicons
                 name={collapsed[category] ? "chevron-down" : "chevron-up"}
                 size={24}
@@ -310,15 +401,21 @@ export default function PreparednessZone({ navigation }) {
 
             <View style={styles.progressBar}>
               <View
-                style={[styles.progressFill, { width: `${percentage}%` }]}
+                style={[
+                  styles.progressFill,
+                  { width: `${percentage}%` },
+                  { backgroundColor: theme.primary },
+                ]}
               />
             </View>
-            <Text style={styles.progressSub}>{percentage}% completed</Text>
+            <Text style={[styles.progressSub, { fontSize: scaleFont(12) }]}>
+              {percentage}% completed
+            </Text>
 
             {!collapsed[category] && (
               <View style={styles.disasterContent}>
                 {categoryTasks.map((task) => {
-                  const bgColor = "#4db6ac";
+                  const bgColor = theme.secondary;
                   const textColor = "#fff";
                   return (
                     <TouchableOpacity
@@ -332,10 +429,20 @@ export default function PreparednessZone({ navigation }) {
                         })
                       }
                     >
-                      <Text style={[styles.cardTitle, { color: textColor }]}>
+                      <Text
+                        style={[
+                          styles.cardTitle,
+                          { color: textColor, fontSize: scaleFont(15) },
+                        ]}
+                      >
                         {task.title} ({task.taskType})
                       </Text>
-                      <Text style={[styles.cardDesc, { color: textColor }]}>
+                      <Text
+                        style={[
+                          styles.cardDesc,
+                          { color: textColor, fontSize: scaleFont(13) },
+                        ]}
+                      >
                         {task.description}
                       </Text>
                     </TouchableOpacity>
@@ -344,11 +451,18 @@ export default function PreparednessZone({ navigation }) {
 
                 {categoryQuiz && (
                   <TouchableOpacity
-                    style={styles.quizCard}
+                    style={[
+                      styles.quizCard,
+                      { backgroundColor: theme.primary },
+                    ]}
                     onPress={() => handleQuizPress(categoryQuiz, category)}
                   >
                     <Ionicons name="document-text" size={20} color="#fff" />
-                    <Text style={styles.quizTitle}>{categoryQuiz.title}</Text>
+                    <Text
+                      style={[styles.quizTitle, { fontSize: scaleFont(15) }]}
+                    >
+                      {categoryQuiz.title}
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -360,11 +474,16 @@ export default function PreparednessZone({ navigation }) {
   );
 }
 
-// Styles
+// Styles (one property per line)
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f6fa" },
-  scrollContent: { padding: 20, paddingBottom: 50 },
-
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f6fa",
+  },
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 50,
+  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -376,8 +495,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  viewAllText: { fontSize: 14, fontWeight: "600", color: "#0f8f84" },
-
+  viewAllText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#0f8f84",
+  },
   progressBox: {
     backgroundColor: "#e8f7f5",
     padding: 18,
@@ -386,7 +508,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#7ed6c9",
   },
-  progressLabel: { fontSize: 14, fontWeight: "500" },
+  progressLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
   progressBar: {
     height: 6,
     backgroundColor: "#e0e0e0",
@@ -394,10 +519,18 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
   },
-  progressFill: { height: 6, backgroundColor: "#0f8f84", borderRadius: 3 },
-  pointsText: { fontWeight: "600", fontSize: 14 },
-
-  badgeRow: { paddingVertical: 12 },
+  progressFill: {
+    height: 6,
+    backgroundColor: "#0f8f84",
+    borderRadius: 3,
+  },
+  pointsText: {
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  badgeRow: {
+    paddingVertical: 12,
+  },
   badgeItem: {
     width: 120,
     padding: 12,
@@ -406,17 +539,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  earnedBadge: { backgroundColor: "#0f8f84" },
-  lockedBadge: { backgroundColor: "#dfe6e9" },
-  earnedBadgeText: { color: "#fff" },
+  earnedBadge: {
+    backgroundColor: "#0f8f84",
+  },
+  lockedBadge: {
+    backgroundColor: "#dfe6e9",
+  },
+  earnedBadgeText: {
+    color: "#fff",
+  },
   badgeName: {
     fontWeight: "600",
     marginTop: 6,
     textAlign: "center",
     fontSize: 14,
   },
-  listBadgeItem: { padding: 12, borderRadius: 12, marginBottom: 10 },
-
+  listBadgeItem: {
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 10,
+  },
   disasterSection: {
     marginBottom: 25,
     backgroundColor: "#fff",
@@ -429,17 +571,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  disasterTitle: { fontSize: 16, fontWeight: "bold", marginLeft: 6 },
-  disasterContent: { marginTop: 12 },
-
+  disasterTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 6,
+  },
+  disasterContent: {
+    marginTop: 12,
+  },
   card: {
     padding: 16,
     borderRadius: 14,
     marginBottom: 12,
   },
-  cardTitle: { fontWeight: "bold", fontSize: 15, marginBottom: 4 },
-  cardDesc: { fontSize: 13 },
-
+  cardTitle: {
+    fontWeight: "bold",
+    fontSize: 15,
+    marginBottom: 4,
+  },
+  cardDesc: {
+    fontSize: 13,
+  },
   quizCard: {
     backgroundColor: "#0f8f84",
     padding: 14,
@@ -448,8 +600,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
   },
-  quizTitle: { color: "#fff", fontWeight: "bold", marginLeft: 8, fontSize: 15 },
-
+  quizTitle: {
+    color: "#fff",
+    fontWeight: "bold",
+    marginLeft: 8,
+    fontSize: 15,
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -481,8 +637,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 12,
   },
-  modalCloseText: { color: "#fff", fontWeight: "bold" },
-
+  modalCloseText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
   progressSub: {
     fontSize: 12,
     fontWeight: "500",

@@ -1,0 +1,40 @@
+{
+  "homeTitle": "Resilio",
+  "preparednessZoneTitle": "Zona de Preparación",
+  "taskScreenTitle": "Tareas / Quiz",
+  "emergencyModeTitle": "Modo de Emergencia",
+  "resourceHubTitle": "Centro de Recursos",
+  "rewardsTitle": "Tienda de Recompensas",
+  "settingsTitle": "Configuración",
+
+  "textSize": "Tamaño de Texto",
+  "textSmall": "Pequeño",
+  "textMedium": "Medio",
+  "textLarge": "Grande",
+  "textExtraLarge": "Extra Grande",
+
+  "subtitle": "Administra tu cuenta, notificaciones y preferencias de la app.",
+  "language": "Idioma",
+
+  "dangerZone": "Zona de Peligro",
+  "reset": "Restablecer",
+  "cancel": "Cancelar",
+  "error": "Error",
+  "resetData": "Restablecer Todos los Datos de la App",
+  "resetting": "Restableciendo...",
+  "resetWarning": "¿Estás seguro que deseas restablecer todos los datos de la app?",
+  "resetCompleteTitle": "Restablecimiento Completo",
+  "resetComplete": "Todos los datos de la app han sido borrados.",
+  "resetError": "No se pudo restablecer los datos de la app. Inténtalo nuevamente.",
+  "resetDescription": "Restablece todos los datos de la app. Esta acción borrará permanentemente ",
+  "resetBold": "puntos, insignias ganadas, tareas y quizzes completados, recompensas y preferencias de la app",
+  "resetDescription2": ". Una vez restablecido, estos datos no podrán recuperarse. Proceda con precaución.",
+  "languageBetaNotice": "La traducción de idiomas está en versión beta. Algunos contenidos pueden no estar completamente traducidos.",
+
+  "noCurrentEmergencies": "No hay emergencias actuales",
+  "preparednessProgress": "Progreso de Preparación",
+  "activitiesCompleted": "actividades completadas",
+  "pointsEarned": "puntos obtenidos",
+  "loadingProgress": "Cargando progreso…",
+  "comingSoon": "Próximamente"
+}

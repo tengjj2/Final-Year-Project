@@ -1,31 +1,239 @@
 // screens/RewardsScreen.js
-import { View, Text, StyleSheet } from "react-native";
+import { useState, useEffect, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { getUserProgress, addPoints } from "../helpers/gamification";
+import {
+  scaleFont,
+  loadFontSize,
+  updateFontScale,
+} from "../helpers/fontHelper";
+import {
+  defaultTheme,
+  darkBlueTheme,
+  orangeTheme,
+  pinkTheme,
+  purchaseTheme,
+  loadPurchasedThemes,
+} from "../helpers/theme";
+import { ThemeContext } from "../helpers/themeContext";
 
 export default function RewardsScreen() {
+  const [points, setPoints] = useState(0);
+  const [fontLoaded, setFontLoaded] = useState(false);
+  const [purchasedThemes, setPurchasedThemes] = useState([]);
+
+  const THEMES_FOR_SALE = [darkBlueTheme, orangeTheme, pinkTheme];
+  const THEME_COST = 50;
+
+  // Access app-wide theme from context
+  const { theme: currentTheme, setTheme: setAppTheme } =
+    useContext(ThemeContext);
+
+  // Load user points, purchased themes, and font
+  useEffect(() => {
+    const init = async () => {
+      const size = await loadFontSize();
+      updateFontScale(size);
+      setFontLoaded(true);
+
+      const userProgress = await getUserProgress();
+      setPoints(userProgress.points);
+
+      const purchased = await loadPurchasedThemes();
+      setPurchasedThemes(purchased);
+    };
+    init();
+  }, []);
+
+  // Redeem dark blue theme
+  const handlePurchaseTheme = async (theme) => {
+    if (points < THEME_COST) {
+      Alert.alert(
+        "Not enough points",
+        `You need ${THEME_COST} points to redeem this theme.`,
+      );
+      return;
+    }
+
+    await addPoints(-THEME_COST);
+    setPoints(points - THEME_COST);
+
+    await purchaseTheme(theme.name);
+    setPurchasedThemes([...purchasedThemes, theme.name]);
+
+    await setAppTheme(theme);
+
+    Alert.alert("Success!", `${theme.name} theme redeemed and applied.`);
+  };
+
+  // Apply a theme from selection
+  const handleSelectTheme = async (theme) => {
+    await setAppTheme(theme);
+    Alert.alert("Theme Applied!", `${theme.name} theme is now active.`);
+  };
+
+  if (!fontLoaded) return null;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Rewards Store</Text>
-      <Text style={styles.subtitle}>
-        Spend your points to unlock rewards or badges!
+    <ScrollView
+      style={[styles.container, { backgroundColor: "#f5f6fa" }]}
+      contentContainerStyle={styles.content}
+    >
+      {/* Points Display */}
+      <Text
+        style={[styles.title, { fontSize: scaleFont(22), color: "#2d3436" }]}
+      >
+        Your Points
       </Text>
-      {/* TODO: implement list of rewards */}
-    </View>
+      <View
+        style={[
+          styles.pointsBox,
+          {
+            backgroundColor: currentTheme.accent,
+            borderColor: currentTheme.secondary,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.pointsText,
+            { fontSize: scaleFont(18), color: currentTheme.primary },
+          ]}
+        >
+          {points} points
+        </Text>
+      </View>
+
+      {/* Available Rewards */}
+      <Text style={[styles.sectionTitle, { color: "#2d3436" }]}>
+        Available Rewards
+      </Text>
+
+      {THEMES_FOR_SALE.map((theme) => (
+        <View key={theme.name} style={styles.rewardItem}>
+          <View
+            style={[styles.colorCircle, { backgroundColor: theme.primary }]}
+          />
+
+          <Text style={[styles.rewardText, { color: "#2d3436" }]}>
+            {theme.name} Theme ({THEME_COST} points)
+          </Text>
+
+          {!purchasedThemes.includes(theme.name) ? (
+            <TouchableOpacity
+              style={[
+                styles.rewardButton,
+                { backgroundColor: currentTheme.primary },
+              ]}
+              onPress={() => handlePurchaseTheme(theme)}
+            >
+              <Text style={styles.rewardButtonText}>Redeem</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text
+              style={{
+                color: "#636e72",
+                marginLeft: 10,
+                fontSize: scaleFont(14),
+              }}
+            >
+              Purchased
+            </Text>
+          )}
+        </View>
+      ))}
+
+      {/* Select/Apply Purchased Themes */}
+      <Text style={[styles.sectionTitle, { color: "#2d3436" }]}>
+        Select Theme
+      </Text>
+
+      <View style={styles.selectContainer}>
+        {/* Default always available */}
+        <TouchableOpacity
+          style={[
+            styles.rewardButton,
+            { backgroundColor: defaultTheme.primary },
+          ]}
+          onPress={() => handleSelectTheme(defaultTheme)}
+        >
+          <Text style={styles.rewardButtonText}>Teal (Default)</Text>
+        </TouchableOpacity>
+
+        {/* Dynamically show purchased themes */}
+        {THEMES_FOR_SALE.map(
+          (theme) =>
+            purchasedThemes.includes(theme.name) && (
+              <TouchableOpacity
+                key={theme.name}
+                style={[
+                  styles.rewardButton,
+                  { backgroundColor: theme.primary },
+                ]}
+                onPress={() => handleSelectTheme(theme)}
+              >
+                <Text style={styles.rewardButtonText}>{theme.name}</Text>
+              </TouchableOpacity>
+            ),
+        )}
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f6fa",
-    padding: 20,
-    justifyContent: "center",
+  container: { flex: 1 },
+  content: { padding: 20 },
+  title: { fontWeight: "bold", marginBottom: 20 },
+  pointsBox: {
+    padding: 30,
+    borderRadius: 16,
+    borderWidth: 2,
     alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 30,
   },
-  title: {
-    fontSize: 22,
+  pointsText: { fontWeight: "bold" },
+  sectionTitle: {
     fontWeight: "bold",
-    marginBottom: 12,
-    color: "#2d3436",
+    marginTop: 20,
+    marginBottom: 10,
+    fontSize: scaleFont(18),
   },
-  subtitle: { fontSize: 16, color: "#636e72", textAlign: "center" },
+  rewardItem: { flexDirection: "row", alignItems: "center", marginBottom: 15 },
+  rewardText: {
+    fontSize: scaleFont(16),
+    flex: 1,
+  },
+  rewardButton: {
+    paddingVertical: 10,
+    borderRadius: 12,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rewardButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: scaleFont(14),
+  },
+  colorCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  selectContainer: {
+    flexDirection: "column",
+    gap: 10,
+  },
 });

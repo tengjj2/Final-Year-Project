@@ -1,0 +1,40 @@
+{
+  "homeTitle": "Resilio",
+  "preparednessZoneTitle": "Zon Kesediaan",
+  "taskScreenTitle": "Tugas / Kuiz",
+  "emergencyModeTitle": "Mod Kecemasan",
+  "resourceHubTitle": "Pusat Sumber",
+  "rewardsTitle": "Kedai Ganjaran",
+  "settingsTitle": "Tetapan",
+
+  "textSize": "Saiz Teks",
+  "textSmall": "Kecil",
+  "textMedium": "Sederhana",
+  "textLarge": "Besar",
+  "textExtraLarge": "Sangat Besar",
+
+  "subtitle": "Urus akaun, pemberitahuan dan tetapan aplikasi anda.",
+  "language": "Bahasa",
+
+  "dangerZone": "Zona Bahaya",
+  "reset": "Tetapkan Semula",
+  "cancel": "Batal",
+  "error": "Ralat",
+  "resetData": "Tetapkan Semula Semua Data Aplikasi",
+  "resetting": "Menetapkan Semula...",
+  "resetWarning": "Adakah anda pasti mahu menetapkan semula semua data aplikasi?",
+  "resetCompleteTitle": "Tetapan Semula Selesai",
+  "resetComplete": "Semua data aplikasi telah dibersihkan.",
+  "resetError": "Gagal menetapkan semula data aplikasi. Sila cuba lagi.",
+  "resetDescription": "Tetapkan semula semua data aplikasi. Tindakan ini akan memadam secara kekal ",
+  "resetBold": "mata, lencana yang diperoleh, tugas dan kuiz yang lengkap, ganjaran, dan tetapan aplikasi",
+  "resetDescription2": ". Setelah ditetapkan semula, data ini tidak boleh dipulihkan. Sila berhati-hati.",
+  "languageBetaNotice": "Terjemahan bahasa masih dalam beta. Sesetengah kandungan mungkin tidak diterjemahkan sepenuhnya.",
+
+  "noCurrentEmergencies": "Tiada kecemasan semasa",
+  "preparednessProgress": "Kemajuan Kesediaan",
+  "activitiesCompleted": "aktiviti selesai",
+  "pointsEarned": "mata diperoleh",
+  "loadingProgress": "Memuatkan kemajuan…",
+  "comingSoon": "Akan Datang"
+}

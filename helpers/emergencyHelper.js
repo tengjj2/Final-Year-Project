@@ -11,7 +11,7 @@ let currentEmergency = null;
  */
 export function sendNotification(emergency) {
   currentEmergency = emergency;
-  alert(`🚨 ${emergency.title}\n${emergency.message}`);
+  alert(`${emergency.title}\n${emergency.message}`);
 }
 
 /**

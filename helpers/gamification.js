@@ -110,3 +110,16 @@ export async function getUserProgress() {
 
   return { points, badges, completedTasks, completedQuizzes };
 }
+
+/**
+ * Check if the user can attempt a quiz in a category
+ * @param {string} category - disaster category
+ * @param {Object} userProgress - { completedTasks, completedQuizzes, badges, points }
+ * @param {Array} tasks - all tasks
+ * @returns {boolean} - true if all tasks in the category are completed
+ */
+export function canAttemptQuiz(category, userProgress, tasks) {
+  const categoryTasks = tasks.filter((t) => t.category === category);
+  const completedTaskIds = userProgress.completedTasks.map((t) => t.id);
+  return categoryTasks.every((task) => completedTaskIds.includes(task.id));
+}

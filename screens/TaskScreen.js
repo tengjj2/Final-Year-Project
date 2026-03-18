@@ -1,6 +1,6 @@
 // screens/TaskScreen.js
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -26,6 +26,7 @@ import {
   getTaskSelections,
   getQuizAnswers,
 } from "../helpers/gamification";
+import { ThemeContext } from "../helpers/themeContext";
 
 export default function TaskScreen({ route, navigation }) {
   const { id, type } = route.params;
@@ -35,6 +36,7 @@ export default function TaskScreen({ route, navigation }) {
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState({});
   const [alreadyCompleted, setAlreadyCompleted] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const init = async () => {
@@ -193,7 +195,7 @@ export default function TaskScreen({ route, navigation }) {
 
       {alreadyCompleted && (
         <Text style={styles.completedText}>
-          Completed — points already awarded
+          Completed - points already awarded
         </Text>
       )}
 
@@ -212,7 +214,7 @@ export default function TaskScreen({ route, navigation }) {
                   checked[item] ? "checkbox-marked" : "checkbox-blank-outline"
                 }
                 size={24}
-                color="#008080"
+                color={theme.primary}
               />
               <Text style={styles.itemText}>{item}</Text>
             </View>
@@ -221,7 +223,15 @@ export default function TaskScreen({ route, navigation }) {
 
       {/* --- Reading --- */}
       {task.taskType === "reading" && (
-        <View style={styles.readingContainer}>
+        <View
+          style={[
+            styles.readingContainer,
+            {
+              backgroundColor: theme.accent,
+              borderColor: theme.secondary,
+            },
+          ]}
+        >
           <Text style={styles.readingText}>
             {task.content || task.description || "No content provided."}
           </Text>
@@ -230,7 +240,15 @@ export default function TaskScreen({ route, navigation }) {
 
       {/* --- Scenario --- */}
       {task.taskType === "scenario" && Array.isArray(task.questions) && (
-        <View style={styles.scenarioContainer}>
+        <View
+          style={[
+            styles.scenarioContainer,
+            {
+              backgroundColor: theme.accent,
+              borderColor: theme.secondary,
+            },
+          ]}
+        >
           {task.questions.map((q, idx) => (
             <View key={idx} style={{ marginBottom: 12 }}>
               {/* Use story as question text */}
@@ -247,7 +265,14 @@ export default function TaskScreen({ route, navigation }) {
                       disabled={alreadyCompleted}
                       style={[
                         styles.option,
-                        isSelected && styles.selectedOption,
+                        {
+                          backgroundColor: theme.background,
+                          borderColor: theme.secondary,
+                        },
+                        isSelected && {
+                          backgroundColor: theme.primary,
+                          borderColor: theme.primary,
+                        },
                       ]}
                       onPress={() =>
                         setAnswers({ ...answers, [task.story]: opt })
@@ -273,7 +298,16 @@ export default function TaskScreen({ route, navigation }) {
       {type === "quiz" &&
         Array.isArray(task.questions) &&
         task.questions.map((q, idx) => (
-          <View key={idx} style={styles.quiz}>
+          <View
+            key={idx}
+            style={[
+              styles.quiz,
+              {
+                backgroundColor: theme.accent,
+                borderColor: theme.secondary,
+              },
+            ]}
+          >
             <Text style={styles.question}>{q.question}</Text>
             {Array.isArray(q.options) &&
               q.options.map((opt) => (
@@ -282,7 +316,14 @@ export default function TaskScreen({ route, navigation }) {
                   disabled={alreadyCompleted}
                   style={[
                     styles.option,
-                    answers[q.question] === opt && styles.selectedOption, // scenario style
+                    {
+                      backgroundColor: theme.background,
+                      borderColor: theme.secondary,
+                    },
+                    answers[q.question] === opt && {
+                      backgroundColor: theme.primary,
+                      borderColor: theme.primary,
+                    }, 
                   ]}
                   onPress={() => setAnswers({ ...answers, [q.question]: opt })}
                 >
@@ -300,7 +341,12 @@ export default function TaskScreen({ route, navigation }) {
         ))}
 
       <TouchableOpacity
-        style={[styles.button, alreadyCompleted && styles.disabledButton]}
+        style={[
+          styles.button,
+          {
+            backgroundColor: alreadyCompleted ? "#b2bec3" : theme.primary,
+          },
+        ]}
         onPress={submit}
         disabled={alreadyCompleted}
       >

@@ -22,7 +22,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -38,7 +38,7 @@
           }
         }
       ],
-      "expo-router"
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -47,7 +47,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "7739640e-a236-4af9-a0b6-ad5a51715d0e"
+        "projectId": "830518b7-7973-42c5-ac70-efa8eea5115e"
       }
     },
     "owner": "jj02",
@@ -55,7 +55,7 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/7739640e-a236-4af9-a0b6-ad5a51715d0e"
+      "url": "https://u.expo.dev/830518b7-7973-42c5-ac70-efa8eea5115e"
     }
   }
 }

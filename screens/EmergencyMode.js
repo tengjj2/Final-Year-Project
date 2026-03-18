@@ -1,6 +1,8 @@
 // screens/EmergencyMode.js
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useContext } from "react";
+import { ThemeContext } from "../helpers/themeContext";
+
 import {
   View,
   Text,
@@ -25,6 +27,11 @@ import {
   getEmergencyContacts,
 } from "../helpers/emergencyHelper";
 import { getDeviceCountry } from "../helpers/locationHelper";
+import {
+  loadFontSize,
+  updateFontScale,
+  scaleFont,
+} from "../helpers/fontHelper";
 
 export default function EmergencyMode() {
   const [deviceCountry, setDeviceCountry] = useState(null);
@@ -34,8 +41,23 @@ export default function EmergencyMode() {
   const [currentAlert, setCurrentAlert] = useState(getCurrentEmergency());
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContacts, setModalContacts] = useState([]);
+  const [fontSize, setFontSize] = useState("medium");
+
   const allowedCountries = ["Singapore", "England", "Japan"];
 
+  const { theme: currentTheme } = useContext(ThemeContext);
+
+  // Load font size from storage on mount
+  useEffect(() => {
+    const fetchFontSize = async () => {
+      const savedSize = await loadFontSize();
+      setFontSize(savedSize);
+      updateFontScale(savedSize);
+    };
+    fetchFontSize();
+  }, []);
+
+  // Update current alert periodically
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
@@ -119,19 +141,33 @@ export default function EmergencyMode() {
 
   const country = deviceCountry || selectedCountry;
 
+  // Font helper function
+  const f = (size) => scaleFont(size);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Current Emergency */}
       {currentAlert && (
         <View style={styles.alertBox}>
-          <Text style={styles.emergencyHeader}>EMERGENCY MODE</Text>
-          <Text style={styles.alertTitle}>{currentAlert.title}</Text>
-          <Text style={styles.alertMessage}>{currentAlert.message}</Text>
+          <Text style={[styles.emergencyHeader, { fontSize: f(24) }]}>
+            EMERGENCY MODE
+          </Text>
+          <Text style={[styles.alertTitle, { fontSize: f(20) }]}>
+            {currentAlert.title}
+          </Text>
+          <Text style={[styles.alertMessage, { fontSize: f(16) }]}>
+            {currentAlert.message}
+          </Text>
 
           <View style={styles.instructionsBox}>
-            <Text style={styles.instructionsTitle}>What you should do:</Text>
+            <Text style={[styles.instructionsTitle, { fontSize: f(16) }]}>
+              What you should do:
+            </Text>
             {getEmergencyInstructions(currentAlert).map((step, index) => (
-              <Text key={index} style={styles.instructionItem}>
+              <Text
+                key={index}
+                style={[styles.instructionItem, { fontSize: f(14) }]}
+              >
                 {index + 1}. {step}
               </Text>
             ))}
@@ -142,9 +178,15 @@ export default function EmergencyMode() {
       {/* No Emergency Status Card */}
       {!currentAlert && (
         <View style={styles.noAlertBox}>
-          <Ionicons name="shield-checkmark" size={40} color="#0f8f84" />
-          <Text style={styles.noAlertTitle}>No Active Emergencies</Text>
-          <Text style={styles.noAlertText}>
+          <Ionicons
+            name="shield-checkmark"
+            size={40}
+            color={currentTheme.primary}
+          />
+          <Text style={[styles.noAlertTitle, { fontSize: f(18) }]}>
+            No Active Emergencies
+          </Text>
+          <Text style={[styles.noAlertText, { fontSize: f(14) }]}>
             Everything is currently safe. You can simulate an emergency to
             practice your response.
           </Text>
@@ -152,14 +194,18 @@ export default function EmergencyMode() {
       )}
 
       {/* Location Display */}
-      <Text style={styles.subtitle}>Detected Location:</Text>
+      <Text style={[styles.subtitle, { fontSize: f(18) }]}>
+        Detected Location:
+      </Text>
       {loadingLocation ? (
-        <ActivityIndicator size="small" color="#0f8f84" />
+        <ActivityIndicator size="small" color={currentTheme.primary} />
       ) : deviceCountry ? (
-        <Text style={styles.locationText}>{deviceCountry}</Text>
+        <Text style={[styles.locationText, { fontSize: f(16) }]}>
+          {deviceCountry}
+        </Text>
       ) : (
         <>
-          <Text style={styles.locationText}>
+          <Text style={[styles.locationText, { fontSize: f(16) }]}>
             {locationTimeout
               ? "Can't find your location, select your country"
               : "No location detected"}
@@ -179,10 +225,15 @@ export default function EmergencyMode() {
       )}
 
       {/* Action Buttons */}
-      <TouchableOpacity style={styles.actionButton} onPress={simulateEmergency}>
+      <TouchableOpacity
+        style={[styles.actionButton, { backgroundColor: currentTheme.primary }]}
+        onPress={simulateEmergency}
+      >
         <View style={styles.buttonRow}>
           <Ionicons name="alert-circle" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Simulate Emergency</Text>
+          <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+            Simulate Emergency
+          </Text>
         </View>
       </TouchableOpacity>
 
@@ -192,7 +243,9 @@ export default function EmergencyMode() {
       >
         <View style={styles.buttonRow}>
           <Ionicons name="checkmark-circle" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Clear Emergency</Text>
+          <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+            Clear Emergency
+          </Text>
         </View>
       </TouchableOpacity>
 
@@ -202,7 +255,9 @@ export default function EmergencyMode() {
       >
         <View style={styles.buttonRow}>
           <Ionicons name="call" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Call Emergency Services</Text>
+          <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+            Call Emergency Services
+          </Text>
         </View>
       </TouchableOpacity>
 
@@ -215,7 +270,7 @@ export default function EmergencyMode() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
+            <Text style={[styles.modalTitle, { fontSize: f(18) }]}>
               Emergency Contacts for {country}
             </Text>
             <ScrollView style={{ maxHeight: 250 }}>
@@ -225,7 +280,7 @@ export default function EmergencyMode() {
                   style={styles.modalItem}
                   onPress={() => callNumber(contact.number)}
                 >
-                  <Text style={styles.modalItemText}>
+                  <Text style={[styles.modalItemText, { fontSize: f(16) }]}>
                     {contact.name} – {contact.number}
                   </Text>
                 </TouchableOpacity>
@@ -235,7 +290,9 @@ export default function EmergencyMode() {
               style={[styles.actionButton, { marginTop: 10 }]}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.buttonText}>Close</Text>
+              <Text style={[styles.buttonText, { fontSize: f(16) }]}>
+                Close
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -261,7 +318,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   emergencyHeader: {
-    fontSize: 24,
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
@@ -269,14 +325,12 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
   },
   alertTitle: {
-    fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
     marginBottom: 6,
   },
   alertMessage: {
-    fontSize: 16,
     color: "#fff",
     textAlign: "center",
   },
@@ -287,13 +341,11 @@ const styles = StyleSheet.create({
     borderTopColor: "rgba(255,255,255,0.4)",
   },
   instructionsTitle: {
-    fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 8,
   },
   instructionItem: {
-    fontSize: 14,
     color: "#fff",
     marginBottom: 6,
   },
@@ -307,31 +359,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 2,
   },
-
   noAlertTitle: {
-    fontSize: 18,
     fontWeight: "bold",
     color: "#2d3436",
     marginTop: 10,
     marginBottom: 4,
   },
-
   noAlertText: {
-    fontSize: 14,
     color: "#636e72",
     textAlign: "center",
   },
 
   /* Location */
   subtitle: {
-    fontSize: 18,
     marginTop: 10,
     marginBottom: 5,
     color: "#2d3436",
     fontWeight: "600",
   },
   locationText: {
-    fontSize: 16,
     fontWeight: "500",
     marginBottom: 10,
     color: "#2d3436",
@@ -347,7 +393,6 @@ const styles = StyleSheet.create({
 
   /* Buttons */
   actionButton: {
-    backgroundColor: "#0f8f84",
     paddingVertical: 14,
     borderRadius: 14,
     marginBottom: 12,
@@ -356,7 +401,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 16,
   },
   buttonRow: {
     flexDirection: "row",
@@ -379,7 +423,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   modalTitle: {
-    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 15,
     color: "#2d3436",
@@ -391,7 +434,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "#eee",
   },
   modalItemText: {
-    fontSize: 16,
     color: "#2d3436",
   },
 });

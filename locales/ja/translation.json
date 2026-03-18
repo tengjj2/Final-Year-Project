@@ -1,0 +1,40 @@
+{
+  "homeTitle": "Resilio",
+  "preparednessZoneTitle": "準備ゾーン",
+  "taskScreenTitle": "タスク / クイズ",
+  "emergencyModeTitle": "緊急モード",
+  "resourceHubTitle": "リソースハブ",
+  "rewardsTitle": "報酬ストア",
+  "settingsTitle": "設定",
+
+  "textSize": "文字サイズ",
+  "textSmall": "小",
+  "textMedium": "中",
+  "textLarge": "大",
+  "textExtraLarge": "特大",
+
+  "subtitle": "アカウント、通知、アプリ設定を管理します。",
+  "language": "言語",
+
+  "dangerZone": "危険ゾーン",
+  "reset": "リセット",
+  "cancel": "キャンセル",
+  "error": "エラー",
+  "resetData": "アプリのすべてのデータをリセット",
+  "resetting": "リセット中...",
+  "resetWarning": "すべてのアプリデータをリセットしてもよろしいですか？",
+  "resetCompleteTitle": "リセット完了",
+  "resetComplete": "すべてのアプリデータが削除されました。",
+  "resetError": "アプリデータのリセットに失敗しました。もう一度お試しください。",
+  "resetDescription": "すべてのアプリデータをリセットします。この操作により永久に ",
+  "resetBold": "ポイント、獲得したバッジ、完了したタスクとクイズ、報酬、およびアプリの設定",
+  "resetDescription2": " が削除されます。一度リセットすると、このデータは回復できません。注意して進めてください。",
+  "languageBetaNotice": "言語翻訳はベータ版です。一部のコンテンツは完全に翻訳されない場合があります。",
+
+  "noCurrentEmergencies": "現在の緊急事態はありません",
+  "preparednessProgress": "準備状況",
+  "activitiesCompleted": "完了した活動",
+  "pointsEarned": "獲得ポイント",
+  "loadingProgress": "進捗を読み込み中…",
+  "comingSoon": "近日公開"
+}

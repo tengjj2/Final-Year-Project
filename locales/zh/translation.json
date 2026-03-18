@@ -1,0 +1,40 @@
+{
+  "homeTitle": "Resilio",
+  "preparednessZoneTitle": "准备区",
+  "taskScreenTitle": "任务 / 测验",
+  "emergencyModeTitle": "紧急模式",
+  "resourceHubTitle": "资源中心",
+  "rewardsTitle": "奖励商店",
+  "settingsTitle": "设置",
+
+  "textSize": "文字大小",
+  "textSmall": "小",
+  "textMedium": "中",
+  "textLarge": "大",
+  "textExtraLarge": "特大",
+
+  "subtitle": "管理您的账户、通知和应用偏好。",
+  "language": "语言",
+
+  "dangerZone": "危险区",
+  "reset": "重置",
+  "cancel": "取消",
+  "error": "错误",
+  "resetData": "重置所有应用数据",
+  "resetting": "重置中...",
+  "resetWarning": "您确定要重置所有应用数据吗？",
+  "resetCompleteTitle": "重置完成",
+  "resetComplete": "所有应用数据已清除。",
+  "resetError": "重置应用数据失败，请重试。",
+  "resetDescription": "重置所有应用数据。此操作将永久清除 ",
+  "resetBold": "积分、已获得徽章、已完成任务和测验、奖励及应用偏好设置",
+  "resetDescription2": "。重置后，这些数据将无法恢复，请谨慎操作。",
+  "languageBetaNotice": "语言翻译处于测试阶段。部分内容可能未完全翻译。",
+
+  "noCurrentEmergencies": "当前没有紧急事件",
+  "preparednessProgress": "准备进度",
+  "activitiesCompleted": "已完成活动",
+  "pointsEarned": "获得积分",
+  "loadingProgress": "加载进度…",
+  "comingSoon": "敬请期待"
+}
