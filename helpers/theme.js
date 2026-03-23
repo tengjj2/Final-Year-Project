@@ -1,17 +1,18 @@
 // helpers/theme.js
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+// AsyncStorage keys
 const THEME_KEY = "appTheme";
 const PURCHASED_THEMES_KEY = "purchasedThemes";
 
-// Define your themes
+// Theme definitions
 export const defaultTheme = {
   name: "Teal",
-  primary: "#0f8f84",      // header & quiz card
-  secondary: "#7ed6c9",    // progress border
-  background: "#f5f6fa",   // screen background
-  accent: "#e8f7f5",       // progress box background
-  text: "#2d3436",         // default text
+  primary: "#0f8f84",
+  secondary: "#7ed6c9",
+  background: "#f5f6fa",
+  accent: "#e8f7f5",
+  text: "#2d3436",
 };
 
 export const darkBlueTheme = {
@@ -39,6 +40,8 @@ export const pinkTheme = {
   text: "#fff",
 };
 
+// Theme persistence helpers
+
 // Save current theme
 export async function setTheme(theme) {
   await AsyncStorage.setItem(THEME_KEY, JSON.stringify(theme));
@@ -52,7 +55,8 @@ export async function loadTheme() {
 
 // Save purchased theme
 export async function purchaseTheme(themeName) {
-  const purchased = JSON.parse(await AsyncStorage.getItem(PURCHASED_THEMES_KEY)) || [];
+  const purchased =
+    JSON.parse(await AsyncStorage.getItem(PURCHASED_THEMES_KEY)) || [];
   if (!purchased.includes(themeName)) {
     purchased.push(themeName);
     await AsyncStorage.setItem(PURCHASED_THEMES_KEY, JSON.stringify(purchased));

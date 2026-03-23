@@ -27,37 +27,37 @@
       "Central": [
         {
           "id": "sg1",
-          "name": "Ang Mo Kio Community Shelter",
-          "address": "Ang Mo Kio Community Centre, Singapore"
+          "name": "Ang Mo Kio Community Centre",
+          "address": "795 Ang Mo Kio Ave 1, Singapore 569976"
         },
         {
           "id": "sg2",
-          "name": "Bishan Evacuation Point",
-          "address": "Bishan Community Club, Singapore"
+          "name": "Bishan Community Club",
+          "address": "51 Bishan St. 13, Singapore 579799"
         }
       ],
 
       "North": [
         {
           "id": "sg3",
-          "name": "Woodlands Emergency Shelter",
-          "address": "Woodlands Secondary School, Singapore"
+          "name": "Nee Soon South Community Centre",
+          "address": "30 Yishun Street 81, Singapore 768455"
         }
       ],
 
       "East": [
         {
           "id": "sg4",
-          "name": "Tampines Shelter",
-          "address": "Tampines Community Centre, Singapore"
+          "name": "Tampines West Community Club",
+          "address": "5 Tampines Ave 3, Singapore 529705"
         }
       ],
 
       "West": [
         {
           "id": "sg5",
-          "name": "Jurong Shelter",
-          "address": "Jurong East Community Club, Singapore"
+          "name": "Jurong Green Community Centre",
+          "address": "6 Jurong West Ave 1, Singapore 649520"
         }
       ]
     },
@@ -66,24 +66,24 @@
       "Tokyo": [
         {
           "id": "jp1",
-          "name": "Tokyo Evacuation Center",
-          "address": "Shinjuku City Office, Tokyo"
+          "name": "Tokyo Rinkai Disaster Prevention Park",
+          "address": "3 Chome-8-35 Ariake, Koto City, Tokyo 135-0063, Japan"
         }
       ],
 
       "Osaka": [
         {
           "id": "jp2",
-          "name": "Osaka Community Shelter",
-          "address": "Osaka City Hall, Osaka"
+          "name": "Midori Elementery School",
+          "address": "2 Chome-4-45 Midori, Tsurumi Ward, Osaka, 538-0054, Japan"
         }
       ],
 
       "Kyoto": [
         {
           "id": "jp3",
-          "name": "Kyoto Disaster Shelter",
-          "address": "Kyoto Municipal Hall, Kyoto"
+          "name": "Kyoto Budo Center",
+          "address": "46-2 Shogoin Entomicho, Sakyo Ward, Kyoto, 606-8323, Japan"
         }
       ]
     },
@@ -92,24 +92,24 @@
       "London": [
         {
           "id": "uk1",
-          "name": "London Emergency Shelter",
-          "address": "London City Hall, London"
+          "name": "London City Hall",
+          "address": "Kamal Chunchie Way, London E16 1ZE, United Kingdom"
         }
       ],
 
       "Manchester": [
         {
           "id": "uk2",
-          "name": "Manchester Relief Centre",
-          "address": "Manchester Town Hall"
+          "name": "Manchester City Council",
+          "address": "Town Hall, Albert Square, Manchester M2 5DB, United Kingdom"
         }
       ],
 
       "Birmingham": [
         {
           "id": "uk3",
-          "name": "Birmingham Emergency Centre",
-          "address": "Birmingham Council House"
+          "name": "Birmingham Town Hall",
+          "address": "Victoria Square, Birmingham B3 3DQ, United Kingdom"
         }
       ]
     }

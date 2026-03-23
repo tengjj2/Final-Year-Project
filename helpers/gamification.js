@@ -1,30 +1,23 @@
 // helpers/gamification.js
 
-// Import AsyncStorage to persist user data locally on device
+// AsyncStorage to store user progress, points, badges, tasks, quizzes
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Keys used to store data in AsyncStorage
+// Keys for AsyncStorage
 const POINTS_KEY = "points";
 const BADGES_KEY = "badges";
 const TASKS_KEY = "completedTasks";
 const QUIZZES_KEY = "completedQuizzes";
 
 // Points Management
-
-/**
- * Add points to the user's current total
- */
+// Add points to user
 export async function addPoints(points) {
   const current = parseInt(await AsyncStorage.getItem(POINTS_KEY)) || 0;
   await AsyncStorage.setItem(POINTS_KEY, (current + points).toString());
 }
 
 // Badge Management
-
-/**
- * Unlock a badge for the user
- * Ensures the badge isn't already unlocked
- */
+// Unlock a new badge if not already unlocked
 export async function unlockBadge(badge) {
   const badges = JSON.parse(await AsyncStorage.getItem(BADGES_KEY)) || [];
   if (!badges.includes(badge)) {
@@ -34,11 +27,7 @@ export async function unlockBadge(badge) {
 }
 
 // Task Management
-
-/**
- * Mark a task as completed
- * Stores any user selections for the task
- */
+// Mark a task as completed, store any user selections
 export async function markTaskComplete(taskId, selections) {
   const completed = JSON.parse(await AsyncStorage.getItem(TASKS_KEY)) || [];
   if (!completed.find((t) => t.id === taskId)) {
@@ -47,17 +36,13 @@ export async function markTaskComplete(taskId, selections) {
   }
 }
 
-/**
- * Check if a task has been completed
- */
+// Check if a task has been completed
 export async function isTaskCompleted(taskId) {
   const completed = JSON.parse(await AsyncStorage.getItem(TASKS_KEY)) || [];
   return completed.some((t) => t.id === taskId);
 }
 
-/**
- * Get user selections for a completed task
- */
+// Get saved selections for a completed task
 export async function getTaskSelections(taskId) {
   const completed = JSON.parse(await AsyncStorage.getItem(TASKS_KEY)) || [];
   const record = completed.find((t) => t.id === taskId);
@@ -65,11 +50,7 @@ export async function getTaskSelections(taskId) {
 }
 
 // Quiz Management
-
-/**
- * Mark a quiz as completed
- * Stores the user's answers
- */
+// Mark a quiz as completed and save user's answers
 export async function markQuizComplete(quizId, answers) {
   const completed = JSON.parse(await AsyncStorage.getItem(QUIZZES_KEY)) || [];
   if (!completed.find((q) => q.id === quizId)) {
@@ -78,17 +59,13 @@ export async function markQuizComplete(quizId, answers) {
   }
 }
 
-/**
- * Check if a quiz has been completed
- */
+// Check if a quiz has been completed
 export async function isQuizCompleted(quizId) {
   const completed = JSON.parse(await AsyncStorage.getItem(QUIZZES_KEY)) || [];
   return completed.some((q) => q.id === quizId);
 }
 
-/**
- * Get answers for a completed quiz
- */
+// Get answers for a completed quiz
 export async function getQuizAnswers(quizId) {
   const completed = JSON.parse(await AsyncStorage.getItem(QUIZZES_KEY)) || [];
   const record = completed.find((q) => q.id === quizId);
@@ -96,10 +73,7 @@ export async function getQuizAnswers(quizId) {
 }
 
 // User Progress
-
-/**
- * Retrieve all user progress data
- */
+// Get all user progress
 export async function getUserProgress() {
   const points = parseInt(await AsyncStorage.getItem(POINTS_KEY)) || 0;
   const badges = JSON.parse(await AsyncStorage.getItem(BADGES_KEY)) || [];
@@ -111,13 +85,8 @@ export async function getUserProgress() {
   return { points, badges, completedTasks, completedQuizzes };
 }
 
-/**
- * Check if the user can attempt a quiz in a category
- * @param {string} category - disaster category
- * @param {Object} userProgress - { completedTasks, completedQuizzes, badges, points }
- * @param {Array} tasks - all tasks
- * @returns {boolean} - true if all tasks in the category are completed
- */
+// Quiz Eligibility
+// Check if user can attempt a quiz in a category
 export function canAttemptQuiz(category, userProgress, tasks) {
   const categoryTasks = tasks.filter((t) => t.category === category);
   const completedTaskIds = userProgress.completedTasks.map((t) => t.id);

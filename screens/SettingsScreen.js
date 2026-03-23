@@ -1,4 +1,5 @@
-// SettingsScreen.js
+// screens/SettingsScreen.js
+
 import { useState, useEffect, useContext } from "react";
 import {
   View,
@@ -8,11 +9,9 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
-
 import { ThemeContext } from "../helpers/themeContext";
 import BottomNavigation from "../helpers/bottomNavigation";
 
@@ -24,18 +23,20 @@ import {
 } from "../helpers/fontHelper";
 
 import { loadLanguage, saveLanguage } from "../helpers/languageHelper";
-
 import { resetAllAppData } from "../helpers/settingsHelper";
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
 
+  // State Management
   const [currentLanguage, setCurrentLanguage] = useState("en");
   const [fontSize, setFontSize] = useState("medium");
   const [resetting, setResetting] = useState(false);
 
+  // Access theme context
   const { theme, resetTheme } = useContext(ThemeContext);
 
+  // Initial Load (Language & Font)
   useEffect(() => {
     initializeSettings();
   }, []);
@@ -51,20 +52,21 @@ export default function SettingsScreen() {
     i18n.changeLanguage(lang);
   };
 
+  // Language Handling
   const changeLanguage = async (lang) => {
     await saveLanguage(lang);
     setCurrentLanguage(lang);
     i18n.changeLanguage(lang);
   };
 
+  // Font Size Handling
   const changeFontSize = async (size) => {
     await saveFontSize(size);
     setFontSize(size);
     updateFontScale(size);
   };
 
-  // Handle complete app reset
-  // inside SettingsScreen.js
+  // Reset App
   const handleResetApp = () => {
     Alert.alert(
       t("dangerZone"),
@@ -78,18 +80,18 @@ export default function SettingsScreen() {
           onPress: async () => {
             setResetting(true);
 
-            // 1. Reset all AsyncStorage data (including gamification, themes, etc.)
+            // Reset all AsyncStorage data (including gamification, themes, etc.)
             await resetAllAppData();
 
-            // 2. Reset theme to default
+            // Reset theme to default
             await resetTheme();
 
-            // 3. Reset language to English
+            // Reset language to English
             await saveLanguage("en");
             setCurrentLanguage("en");
             i18n.changeLanguage("en");
 
-            // 4. Reset font size to medium
+            // Reset font size to medium
             await saveFontSize("medium");
             setFontSize("medium");
             updateFontScale("medium");
@@ -106,6 +108,7 @@ export default function SettingsScreen() {
     );
   };
 
+  // JSX
   return (
     <View style={styles.screenContainer}>
       <ScrollView
@@ -122,7 +125,7 @@ export default function SettingsScreen() {
           {t("subtitle")}
         </Text>
 
-        {/* TEXT SIZE */}
+        {/* Text Size */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
             {t("textSize")}
@@ -153,7 +156,7 @@ export default function SettingsScreen() {
           ))}
         </View>
 
-        {/* LANGUAGE */}
+        {/* Language */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
             {t("language")}
@@ -184,6 +187,7 @@ export default function SettingsScreen() {
             </TouchableOpacity>
           ))}
 
+          {/* Beta notice */}
           <View style={styles.betaNotice}>
             <Ionicons name="alert-circle-outline" size={18} color="#ffa500" />
             <Text
@@ -200,7 +204,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* DANGER ZONE */}
+        {/* Danger zone*/}
         <View style={styles.dangerZone}>
           <Ionicons name="alert-circle" size={34} color="#d63031" />
           <Text
@@ -214,7 +218,7 @@ export default function SettingsScreen() {
             {t("dangerZone") || "Danger Zone"}
           </Text>
 
-          {/* Updated Description */}
+          {/* Reset */}
           <Text
             style={{
               fontSize: scaleFont(14),
@@ -248,7 +252,8 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {/* Bottom Navigation Bar (sticky) */}
+
+      {/* Bottom Navigation Bar */}
       <BottomNavigation activeKey="Settings" />
     </View>
   );

@@ -1,50 +1,47 @@
-# Welcome to your Expo app 👋
+# Local Disaster Preparedness and Response App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile application built with React Native and Expo to help users prepare for, respond to, and recover from disasters. Features include emergency alerts, preparedness tracking, gamified tasks, resource hub, and personalized settings.
 
-## Get started
+---
 
-1. Install dependencies
+## Installation & Setup
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+1. Install Dependencies
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Start the Expo server
+```bash
+npx expo start
+```
 
-## Learn more
+3. Scan the QR code to launch the app
 
-To learn more about developing your project with Expo, look at the following resources:
+## Libraries & Packages Used 
+- Framework & UI: React Native, Expo, React Navigation (Native Stack)
+- State Management: React Context API
+- Localization: i18next, react-i18next, expo-localization
+- Persistent Storage: @react-native-async-storage/async-storage
+- Icons: @expo/vector-icons, react-native-vector-icons
+- Other Expo Modules: expo-constants, expo-font, expo-haptics, expo-image, expo-linking, expo-location, expo-notifications, expo-permissions, expo-splash-screen, expo-status-bar, expo-system-ui, expo-updates, expo-web-browser
+- Utilities: react-native-safe-area-context, react-native-gesture-handler, react-native-reanimated, react-native-screens
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Dev Dependencies: TypeScript, ESLint, eslint-config-expo, @types/react
 
-## Join the community
+## Folder Structure
+- App.js - Entry point of the app
+- i18n.js - Localization setup
+- screens/ - App screens (Home, Resource Hub, Emergency Mode, Preparedness Zone, Rewards, Tasks, Settings)
+- helpers/ - Reusable helpers (theme, gamification, resource, location, font, language, settings)
+- data/ - JSON files for tasks, quizzes, badges, and resources
+- locales/ - JSON files for translation storage
 
-Join our community of developers creating universal apps.
+## Acknowledgements / References
+- i18next and react-i18next for localization
+- Expo for cross-platform mobile development
+- React Navigation for app navigation
+- Open-source icons and assets used in the UI
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## License
+This project is for academic purposes and does not include a license.

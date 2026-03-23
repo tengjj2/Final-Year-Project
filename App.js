@@ -1,11 +1,13 @@
 // App.js
 
-// Import i18n
+// Load i18n configuration
 import "./i18n";
+
+// React and hooks
 import { useTranslation } from "react-i18next";
 import React, { useContext } from "react";
 
-// React Navigation Imports
+// React Navigation
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -24,6 +26,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
 
+// Root component of the app
 export default function App() {
   return (
     <ThemeProvider>
@@ -32,10 +35,10 @@ export default function App() {
   );
 }
 
-// Separate component so we can consume ThemeContext
+// Main navigation stack
 function MainStack() {
   const { t } = useTranslation();
-  const { theme } = useContext(ThemeContext); // Get current theme from context
+  const { theme } = useContext(ThemeContext);
 
   return (
     <NavigationContainer>
@@ -43,7 +46,7 @@ function MainStack() {
         initialRouteName="Home"
         screenOptions={{
           headerStyle: {
-            backgroundColor: theme.primary, // Stack header reflects current theme
+            backgroundColor: theme.primary,
           },
           headerTintColor: "#fff",
           headerTitleAlign: "center",
@@ -52,36 +55,43 @@ function MainStack() {
           },
         }}
       >
+        {/* Home Screen */}
         <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{ title: t("homeTitle") }}
         />
+        {/* Preparedness Zone */}
         <Stack.Screen
           name="PreparednessZone"
           component={PreparednessZone}
           options={{ title: t("preparednessZoneTitle") }}
         />
+        {/* Task/Quiz Screen */}
         <Stack.Screen
           name="TaskScreen"
           component={TaskScreen}
           options={{ title: t("taskScreenTitle") }}
         />
+        {/* Emergency Mode */}
         <Stack.Screen
           name="EmergencyMode"
           component={EmergencyMode}
           options={{ title: t("emergencyModeTitle") }}
         />
+        {/* Resource Hub */}
         <Stack.Screen
           name="ResourceHub"
           component={ResourceHub}
           options={{ title: t("resourceHubTitle") }}
         />
+        {/* Rewards Screen */}
         <Stack.Screen
           name="Rewards"
           component={RewardsScreen}
           options={{ title: t("rewardsTitle") }}
         />
+        {/* Settings */}
         <Stack.Screen
           name="Settings"
           component={SettingsScreen}

@@ -1,4 +1,6 @@
 // helpers/bottomNavigation.js
+
+// Imports for navigation and UI
 import React, { useContext } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -6,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "./themeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+// Tab configuration (used to render navigation buttons)
 const TAB_ITEMS = [
   { key: "PreparednessZone", icon: "school-outline", label: "Preparedness" },
   { key: "ResourceHub", icon: "library-outline", label: "Resource Hub" },
@@ -14,6 +17,7 @@ const TAB_ITEMS = [
   { key: "Settings", icon: "settings-outline", label: "Settings" },
 ];
 
+// Bottom navigation component
 export default function BottomNavigation({ activeKey }) {
   const navigation = useNavigation();
   const { theme } = useContext(ThemeContext);
@@ -29,7 +33,7 @@ export default function BottomNavigation({ activeKey }) {
       {TAB_ITEMS.map((item) => {
         const isActive = activeKey === item.key;
 
-        // Special styling for Home button
+        // Special styling for the Home Button (center button)
         if (item.key === "Home") {
           return (
             <TouchableOpacity
@@ -49,14 +53,14 @@ export default function BottomNavigation({ activeKey }) {
             >
               <Ionicons
                 name={item.icon}
-                size={isActive ? 32 : 28} // bigger if active
+                size={isActive ? 32 : 28}
                 color={isActive ? theme.primary : "#fff"}
               />
             </TouchableOpacity>
           );
         }
 
-        // Regular tab buttons
+        // Regular navigation buttons
         return (
           <TouchableOpacity
             key={item.key}
@@ -64,9 +68,10 @@ export default function BottomNavigation({ activeKey }) {
             onPress={() => navigation.navigate(item.key)}
           >
             <View
+              // Show white background "bubble" when active
               style={[
                 isActive && {
-                  backgroundColor: "#fff", // bubble behind icon
+                  backgroundColor: "#fff",
                   borderRadius: 25,
                   padding: 6,
                   marginBottom: 4,
@@ -80,7 +85,7 @@ export default function BottomNavigation({ activeKey }) {
             >
               <Ionicons
                 name={item.icon}
-                size={isActive ? 40 : 24} // bigger if active
+                size={isActive ? 40 : 24}
                 color={isActive ? theme.primary : "#fff"}
               />
             </View>
@@ -102,6 +107,7 @@ export default function BottomNavigation({ activeKey }) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -115,15 +121,18 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+
   tabButton: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
   },
+
   tabLabel: {
     fontSize: 10,
     marginTop: 2,
   },
+
   homeButton: {
     width: 70,
     height: 70,

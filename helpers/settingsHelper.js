@@ -2,15 +2,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { defaultTheme } from "./theme";
 
-// Keys from gamification.js
+// Keys uesd for gamification data
 const POINTS_KEY = "points";
 const BADGES_KEY = "badges";
 const TASKS_KEY = "completedTasks";
 const QUIZZES_KEY = "completedQuizzes";
 
-/**
- * Reset all app data to default values
- */
+// Reset all app data to default values
 export async function resetAllAppData() {
   try {
     // Reset gamification / preparedness zone data
@@ -31,10 +29,7 @@ export async function resetAllAppData() {
     // Reset location for Resource Hub
     await AsyncStorage.removeItem("country");
     await AsyncStorage.removeItem("state");
-
-    // Reset other preferences
-    await AsyncStorage.removeItem("location"); // example
-    await AsyncStorage.removeItem("notificationsEnabled"); // example
+    await AsyncStorage.removeItem("location");
 
     // Reset theme to default
     await AsyncStorage.setItem("theme", JSON.stringify(defaultTheme));

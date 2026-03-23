@@ -1,4 +1,5 @@
 // screens/PreparednessZone.js
+
 import { useState, useCallback, useEffect, useContext } from "react";
 import {
   View,
@@ -11,7 +12,6 @@ import {
   Modal,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import tasks from "../data/tasks.json";
@@ -24,6 +24,7 @@ import {
   calculateProgress,
   calculateCategoryProgress,
   initCollapseState,
+  getDisasterCategories,
 } from "../helpers/progressHelper";
 import { getUserProgress, canAttemptQuiz } from "../helpers/gamification";
 
@@ -34,6 +35,7 @@ import {
 } from "../helpers/fontHelper";
 
 export default function PreparednessZone({ navigation }) {
+  // State
   const [progress, setProgress] = useState({ percentage: 0 });
   const [userBadges, setUserBadges] = useState([]);
   const [points, setPoints] = useState(0);
@@ -50,7 +52,20 @@ export default function PreparednessZone({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
   const { theme } = useContext(ThemeContext);
 
-  // Load font size from storage
+  const disasterCategories = getDisasterCategories(tasks, quizzes);
+
+  const disasterIcons = {
+    general: "shield-checkmark",
+    fire: "flame",
+    earthquake: "warning",
+    flood: "water",
+    typhoon: "rainy",
+    wildfire: "leaf",
+    power: "flash",
+    haze: "cloudy",
+  };
+
+  // Load font size
   useEffect(() => {
     const initializeFont = async () => {
       const size = await loadFontSize();
@@ -83,17 +98,7 @@ export default function PreparednessZone({ navigation }) {
     }, []),
   );
 
-  const disasterIcons = {
-    general: "shield-checkmark",
-    fire: "flame",
-    earthquake: "warning",
-    flood: "water",
-    typhoon: "rainy",
-    wildfire: "leaf",
-    power: "flash",
-    haze: "cloudy",
-  };
-
+  // Collapse toggle for disaster categories
   const toggleCollapse = (category) => {
     setCollapsed((prev) => ({
       ...prev,
@@ -101,15 +106,13 @@ export default function PreparednessZone({ navigation }) {
     }));
   };
 
-  const disasterCategories = [
-    ...new Set([...tasks, ...quizzes].map((item) => item.category)),
-  ];
-
+  // Badge modals
   const openBadgeModal = (badge) => {
     setSelectedBadge(badge);
     setBadgeModalVisible(true);
   };
 
+  // Quiz press handler
   const handleQuizPress = (quiz, category) => {
     if (!canAttemptQuiz(category, userProgress, tasks)) {
       Alert.alert(
@@ -122,11 +125,12 @@ export default function PreparednessZone({ navigation }) {
     navigation.navigate("TaskScreen", { id: quiz.id, type: "quiz" });
   };
 
-  // wait for font to load
+  // Wait for font to load
   if (!fontLoaded) {
     return null;
   }
 
+  // JSX
   return (
     <View style={styles.screenContainer}>
       <ScrollView
@@ -483,36 +487,42 @@ export default function PreparednessZone({ navigation }) {
   );
 }
 
-// Styles (one property per line)
+// Styles
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     backgroundColor: "#f5f6fa",
   },
+
   container: {
     flex: 1,
     backgroundColor: "#f5f6fa",
   },
+
   scrollContent: {
     padding: 20,
     paddingBottom: 120,
   },
+
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
     color: "#2d3436",
   },
+
   sectionHeaderRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
+
   viewAllText: {
     fontSize: 14,
     fontWeight: "600",
     color: "#0f8f84",
   },
+
   progressBox: {
     backgroundColor: "#e8f7f5",
     padding: 18,
@@ -521,10 +531,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#7ed6c9",
   },
+
   progressLabel: {
     fontSize: 14,
     fontWeight: "500",
   },
+
   progressBar: {
     height: 6,
     backgroundColor: "#e0e0e0",
@@ -532,18 +544,22 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
   },
+
   progressFill: {
     height: 6,
     backgroundColor: "#0f8f84",
     borderRadius: 3,
   },
+
   pointsText: {
     fontWeight: "600",
     fontSize: 14,
   },
+
   badgeRow: {
     paddingVertical: 12,
   },
+
   badgeItem: {
     width: 120,
     padding: 12,
@@ -552,26 +568,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   earnedBadge: {
     backgroundColor: "#0f8f84",
   },
+
   lockedBadge: {
     backgroundColor: "#dfe6e9",
   },
+
   earnedBadgeText: {
     color: "#fff",
   },
+
   badgeName: {
     fontWeight: "600",
     marginTop: 6,
     textAlign: "center",
     fontSize: 14,
   },
+
   listBadgeItem: {
     padding: 12,
     borderRadius: 12,
     marginBottom: 10,
   },
+
   disasterSection: {
     marginBottom: 25,
     backgroundColor: "#fff",
@@ -579,32 +601,39 @@ const styles = StyleSheet.create({
     padding: 15,
     elevation: 2,
   },
+
   disasterHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
+
   disasterTitle: {
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 6,
   },
+
   disasterContent: {
     marginTop: 12,
   },
+
   card: {
     padding: 16,
     borderRadius: 14,
     marginBottom: 12,
   },
+
   cardTitle: {
     fontWeight: "bold",
     fontSize: 15,
     marginBottom: 4,
   },
+
   cardDesc: {
     fontSize: 13,
   },
+
   quizCard: {
     backgroundColor: "#0f8f84",
     padding: 14,
@@ -613,18 +642,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
   },
+
   quizTitle: {
     color: "#fff",
     fontWeight: "bold",
     marginLeft: 8,
     fontSize: 15,
   },
+
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
+
   modalContent: {
     backgroundColor: "#fff",
     borderRadius: 16,
@@ -632,28 +664,33 @@ const styles = StyleSheet.create({
     width: "85%",
     alignItems: "center",
   },
+
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 8,
     textAlign: "center",
   },
+
   modalDesc: {
     fontSize: 14,
     color: "#636e72",
     textAlign: "center",
     marginBottom: 20,
   },
+
   modalCloseButton: {
     backgroundColor: "#0f8f84",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 12,
   },
+
   modalCloseText: {
     color: "#fff",
     fontWeight: "bold",
   },
+
   progressSub: {
     fontSize: 12,
     fontWeight: "500",

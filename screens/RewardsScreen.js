@@ -1,4 +1,5 @@
 // screens/RewardsScreen.js
+
 import { useState, useEffect, useContext } from "react";
 import {
   View,
@@ -8,6 +9,8 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { getUserProgress, addPoints } from "../helpers/gamification";
 import {
   scaleFont,
@@ -22,8 +25,8 @@ import {
   purchaseTheme,
   loadPurchasedThemes,
 } from "../helpers/theme";
+
 import { ThemeContext } from "../helpers/themeContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomNavigation from "../helpers/bottomNavigation";
 
 export default function RewardsScreen() {
@@ -35,19 +38,21 @@ export default function RewardsScreen() {
   const THEME_COST = 50;
 
   // Access app-wide theme from context
-  const { theme: currentTheme, setTheme: setAppTheme /*, resetFlag*/ } =
+  const { theme: currentTheme, setTheme: setAppTheme } =
     useContext(ThemeContext);
 
-  // Load user points, purchased themes, and font only once on mount
+  // Load font, points, and purchased themes on mount
   useEffect(() => {
     const init = async () => {
       const size = await loadFontSize();
       updateFontScale(size);
       setFontLoaded(true);
 
+      // Load points
       const userProgress = await getUserProgress();
       setPoints(userProgress.points);
 
+      // Load purchased themes
       let purchased = await loadPurchasedThemes();
 
       // If no themes purchased yet, ensure array saved
@@ -74,12 +79,15 @@ export default function RewardsScreen() {
       return;
     }
 
+    // Deduct points
     await addPoints(-THEME_COST);
     setPoints(points - THEME_COST);
 
+    // Mark theme as purchased
     await purchaseTheme(theme.name);
     setPurchasedThemes([...purchasedThemes, theme.name]);
 
+    // Apply theme immediately
     await setAppTheme(theme);
 
     Alert.alert("Success!", `${theme.name} theme redeemed and applied.`);
@@ -93,6 +101,7 @@ export default function RewardsScreen() {
 
   if (!fontLoaded) return null;
 
+  // JSX
   return (
     <View style={styles.screenContainer}>
       <ScrollView
@@ -180,7 +189,7 @@ export default function RewardsScreen() {
             <Text style={styles.rewardButtonText}>Teal (Default)</Text>
           </TouchableOpacity>
 
-          {/* Dynamically show purchased themes */}
+          {/* Dynamically render purchased themes */}
           {THEMES_FOR_SALE.map(
             (theme) =>
               purchasedThemes.includes(theme.name) && (
@@ -199,20 +208,32 @@ export default function RewardsScreen() {
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation Bar (no tab highlighted) */}
+      {/* Bottom Navigation Bar */}
       <BottomNavigation activeKey="" />
     </View>
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     backgroundColor: "#f5f6fa",
   },
-  container: { flex: 1 },
-  content: { padding: 20, paddingBottom: 40, },
-  title: { fontWeight: "bold", marginBottom: 20 },
+
+  container: {
+    flex: 1,
+  },
+
+  content: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  title: {
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+
   pointsBox: {
     padding: 30,
     borderRadius: 16,
@@ -221,13 +242,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 30,
   },
-  pointsText: { fontWeight: "bold" },
+
+  pointsText: {
+    fontWeight: "bold",
+  },
+
   sectionTitle: {
     fontWeight: "bold",
     marginTop: 20,
     marginBottom: 10,
     fontSize: scaleFont(18),
   },
+
   rewardItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -236,11 +262,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
   },
+
   rewardText: {
     fontSize: scaleFont(16),
     flex: 1,
     flexShrink: 1,
   },
+
   rewardButton: {
     paddingVertical: 10,
     borderRadius: 12,
@@ -248,11 +276,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   rewardButtonText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: scaleFont(14),
   },
+
   colorCircle: {
     width: 20,
     height: 20,
@@ -261,6 +291,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
   },
+
   selectContainer: {
     flexDirection: "column",
     gap: 10,

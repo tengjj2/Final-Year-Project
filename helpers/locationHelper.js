@@ -1,12 +1,9 @@
 // helpers/locationHelper.js
 
-// Import Expo Location API to get device locaiton and perform reverse geocoding
+// Import Expo Location API to get device location and perform reverse geocoding
 import * as Location from "expo-location";
 
-/**
- * Get the device's country using Expo Location API
- * Will return `null` if location cannot be obtained within the specified timeout
- */
+// Get the device's country
 export async function getDeviceCountry(timeout = 10000) {
   return new Promise(async (resolve) => {
     // Set timeout to prevent long waiting
@@ -34,7 +31,6 @@ export async function getDeviceCountry(timeout = 10000) {
       clearTimeout(timeoutId);
       resolve(reverse?.[0]?.country || null);
     } catch (err) {
-      console.log("Location error:", err);
       clearTimeout(timeoutId);
       resolve(null);
     }

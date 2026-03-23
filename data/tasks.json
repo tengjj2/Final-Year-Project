@@ -1,12 +1,11 @@
 [
-  /* GENERAL */
   {
     "id": 1,
     "type": "task",
     "category": "general",
     "taskType": "reading",
     "title": "Introduction to Emergency Preparedness",
-    "description": "Learn why being prepared is important for all types of emergencies.",
+    "description": "Learn why being prepared is important for all type s of emergencies.",
     "points": 10,
     "content": "Disasters can happen at any time. Being prepared saves lives. You should have an emergency kit, a communication plan, and know evacuation routes."
   },
@@ -48,8 +47,6 @@
       }
     ]
   },
-
-  /* FIRE */
   {
     "id": 4,
     "type": "task",
@@ -95,8 +92,6 @@
       }
     ]
   },
-
-  /* EARTHQUAKE */
   {
     "id": 7,
     "type": "task",
@@ -142,8 +137,6 @@
       }
     ]
   },
-
-  /* FLOOD */
   {
     "id": 10,
     "type": "task",
@@ -189,8 +182,6 @@
       }
     ]
   },
-
-  /* TYPHOON */
   {
     "id": 13,
     "type": "task",
@@ -237,8 +228,6 @@
       }
     ]
   },
-
-  /* WILDFIRE */
   {
     "id": 16,
     "type": "task",
@@ -284,8 +273,6 @@
       }
     ]
   },
-
-  /* POWER OUTAGE */
   {
     "id": 19,
     "type": "task",
@@ -331,8 +318,6 @@
       }
     ]
   },
-
-  /* HAZE */
   {
     "id": 22,
     "type": "task",

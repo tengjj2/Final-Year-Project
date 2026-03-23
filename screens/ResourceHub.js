@@ -10,7 +10,6 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import {
@@ -24,39 +23,14 @@ import {
   callNumber,
   openMap,
   filterResource,
+  RESOURCE_OPTIONS,
 } from "../helpers/resourceHelper";
 
 import { ThemeContext } from "../helpers/themeContext";
 import BottomNavigation from "../helpers/bottomNavigation";
 
-const RESOURCE_OPTIONS = [
-  {
-    type: "contacts",
-    icon: "call-outline",
-    title: "Emergency Contacts",
-    sub: "Find help fast",
-  },
-  {
-    type: "shelters",
-    icon: "location-outline",
-    title: "Emergency Shelters",
-    sub: "Find nearby safe locations",
-  },
-  {
-    type: "disasterInfo",
-    icon: "shield-checkmark-outline",
-    title: "Safety Guides",
-    sub: "Step-by-step instructions",
-  },
-  {
-    type: "disasters",
-    icon: "information-circle-outline",
-    title: "Disaster Information",
-    sub: "Learn about emergencies",
-  },
-];
-
 export default function ResourceHub() {
+  // State
   const countries = getCountries();
 
   const [country, setCountry] = useState(null);
@@ -64,7 +38,6 @@ export default function ResourceHub() {
 
   const [locationModal, setLocationModal] = useState(false);
   const [resourceModal, setResourceModal] = useState(false);
-
   const [step, setStep] = useState("country");
   const [resourceType, setResourceType] = useState(null);
 
@@ -77,7 +50,7 @@ export default function ResourceHub() {
 
   const { theme } = useContext(ThemeContext);
 
-  // Load saved location
+  // Load saved location on mount
   useEffect(() => {
     const loadLocation = async () => {
       const { country, state } = await loadSavedLocation();
@@ -93,16 +66,18 @@ export default function ResourceHub() {
     loadLocation();
   }, []);
 
+  // Handlers
   const openResource = (type) => {
     setResourceType(type);
     setSearchText("");
     setResourceModal(true);
   };
 
+  // JSX
   return (
     <View style={styles.screenContainer}>
       <ScrollView contentContainerStyle={styles.scrollingContainer}>
-        {/* LOCATION */}
+        {/* Location */}
         <TouchableOpacity
           style={[
             styles.locationCard,
@@ -119,7 +94,7 @@ export default function ResourceHub() {
           </Text>
         </TouchableOpacity>
 
-        {/* INFO */}
+        {/* Info Card */}
         <View
           style={[
             styles.infoCard,
@@ -136,7 +111,7 @@ export default function ResourceHub() {
           </Text>
         </View>
 
-        {/* BUTTONS */}
+        {/* Resource Buttons*/}
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {RESOURCE_OPTIONS.map((item, index) => (
             <TouchableOpacity
@@ -162,7 +137,7 @@ export default function ResourceHub() {
           </View>
         </ScrollView>
 
-        {/* LOCATION MODAL */}
+        {/* Location Modal */}
         <Modal visible={locationModal} animationType="slide">
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>
@@ -216,7 +191,7 @@ export default function ResourceHub() {
           </View>
         </Modal>
 
-        {/* RESOURCE MODAL */}
+        {/* Resource Modal */}
         <Modal visible={resourceModal} animationType="slide">
           <View style={styles.modalContainerFull}>
             <TouchableOpacity
@@ -242,6 +217,7 @@ export default function ResourceHub() {
             />
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
+              {/* Emergency Contacts */}
               {resourceType === "contacts" &&
                 emergencyContacts
                   .filter((i) => filterResource(i, "contacts", searchText))
@@ -266,6 +242,7 @@ export default function ResourceHub() {
                     </TouchableOpacity>
                   ))}
 
+              {/* Shelters */}
               {resourceType === "shelters" &&
                 shelters
                   .filter((s) => filterResource(s, "shelters", searchText))
@@ -286,6 +263,7 @@ export default function ResourceHub() {
                     </TouchableOpacity>
                   ))}
 
+              {/* Disaster Information */}
               {resourceType === "disasterInfo" &&
                 disasterInfo
                   .filter((d) => filterResource(d, "disasterInfo", searchText))
@@ -309,6 +287,7 @@ export default function ResourceHub() {
                     </View>
                   ))}
 
+              {/* Disasters */}
               {resourceType === "disasters" &&
                 disasterInfo
                   .filter((d) => filterResource(d, "disasters", searchText))
@@ -332,23 +311,27 @@ export default function ResourceHub() {
         </Modal>
       </ScrollView>
 
-      {/* Bottom Navigation Bar (sticky) */}
+      {/* Bottom Navigation Bar */}
       <BottomNavigation activeKey="ResourceHub" />
     </View>
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     backgroundColor: "#f5f6fa",
   },
+
   scrollingContainer: {
     padding: 10,
     paddingBottom: 120,
   },
 
-  scrollContainer: { paddingBottom: 30 },
+  scrollContainer: {
+    paddingBottom: 30,
+  },
 
   locationCard: {
     margin: 20,
@@ -359,8 +342,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#e8f7f5",
     alignItems: "center",
   },
-  locationLabel: { fontSize: 15 },
-  locationText: { fontSize: 20, fontWeight: "bold", color: "#0f8f84" },
+
+  locationLabel: {
+    fontSize: 15,
+  },
+  locationText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#0f8f84",
+  },
 
   infoCard: {
     marginHorizontal: 20,
@@ -370,9 +360,21 @@ const styles = StyleSheet.create({
     borderColor: "#19b2a5",
     backgroundColor: "#f3fbfa",
   },
-  infoRow: { flexDirection: "row", alignItems: "center" },
-  infoTitle: { fontSize: 18, marginLeft: 10, fontWeight: "bold" },
-  infoText: { fontSize: 15, color: "#444" },
+
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  infoTitle: {
+    fontSize: 18,
+    marginLeft: 10,
+    fontWeight: "bold",
+  },
+
+  infoText: {
+    fontSize: 15,
+    color: "#444",
+  },
 
   resourceButton: {
     flexDirection: "row",
@@ -383,9 +385,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#0f8f84",
   },
-  resourceText: { marginLeft: 15 },
-  resourceTitle: { fontSize: 18, color: "#fff", fontWeight: "bold" },
-  resourceSubtitle: { fontSize: 14, color: "#dff6f4", marginTop: 4 },
+  resourceText: {
+    marginLeft: 15,
+  },
+  resourceTitle: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  resourceSubtitle: {
+    fontSize: 14,
+    color: "#dff6f4",
+    marginTop: 4,
+  },
 
   instructionCard: {
     marginHorizontal: 20,
@@ -395,7 +407,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#e9ecef",
     alignItems: "center",
   },
-  instructionText: { fontSize: 16, textAlign: "center" },
+
+  instructionText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
 
   card: {
     backgroundColor: "#fff",
@@ -404,18 +420,40 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
   },
-  cardTitle: { fontSize: 16, fontWeight: "600" },
-  cardText: { fontSize: 14, marginTop: 4 },
+
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  cardText: {
+    fontSize: 14,
+    marginTop: 4,
+  },
+
   cardAction: {
     fontSize: 14,
     marginTop: 4,
     color: "#0f8f84",
     fontWeight: "600",
   },
-  bullet: { fontSize: 14, marginTop: 4 },
 
-  modalContainer: { flex: 1, padding: 25, backgroundColor: "#f5f6fa" },
-  modalContainerFull: { flex: 1, padding: 25, backgroundColor: "#f5f6fa" },
+  bullet: {
+    fontSize: 14,
+    marginTop: 4,
+  },
+
+  modalContainer: {
+    flex: 1,
+    padding: 25,
+    backgroundColor: "#f5f6fa",
+  },
+
+  modalContainerFull: {
+    flex: 1,
+    padding: 25,
+    backgroundColor: "#f5f6fa",
+  },
 
   modalTitle: {
     fontSize: 26,
@@ -430,11 +468,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecf0f1",
     marginTop: 15,
   },
-  countryText: { fontSize: 20, fontWeight: "600" },
 
-  backButton: { flexDirection: "row", marginTop: 30 },
-  backButtonModal: { flexDirection: "row", marginBottom: 15 },
-  backText: { fontSize: 18, marginLeft: 8 },
+  countryText: {
+    fontSize: 20,
+    fontWeight: "600",
+  },
+
+  backButton: {
+    flexDirection: "row",
+    marginTop: 30,
+  },
+
+  backButtonModal: {
+    flexDirection: "row",
+    marginBottom: 15,
+  },
+
+  backText: {
+    fontSize: 18,
+    marginLeft: 8,
+  },
 
   searchInput: {
     margin: 20,

@@ -10,12 +10,9 @@ import {
   StyleSheet,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
-// Data
 import tasks from "../data/tasks.json";
 import quizzes from "../data/quizzes.json";
 
-// Helper functions
 import {
   addPoints,
   unlockBadge,
@@ -28,16 +25,21 @@ import {
 } from "../helpers/gamification";
 import { ThemeContext } from "../helpers/themeContext";
 
+// Component
 export default function TaskScreen({ route, navigation }) {
   const { id, type } = route.params;
+
+  // Get correct data set
   const data = type === "task" ? tasks : quizzes;
   const task = data.find((t) => t.id === id);
 
+  // State
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState({});
   const [alreadyCompleted, setAlreadyCompleted] = useState(false);
   const { theme } = useContext(ThemeContext);
 
+  // Initialise Task / Quiz state
   useEffect(() => {
     const init = async () => {
       if (!task) return;
@@ -74,10 +76,11 @@ export default function TaskScreen({ route, navigation }) {
 
         // Reading
         if (task.taskType === "reading") {
-          setChecked({}); // nothing to check
+          setChecked({});
         }
       }
 
+      // Quiz logic
       if (type === "quiz" && Array.isArray(task.questions)) {
         const completed = await isQuizCompleted(id);
         setAlreadyCompleted(completed);
@@ -95,8 +98,10 @@ export default function TaskScreen({ route, navigation }) {
     init();
   }, [id]);
 
+  // Guard clause
   if (!task) return <Text>Task or quiz not found</Text>;
 
+  // Submit Handler
   const submit = async () => {
     if (type === "task") {
       switch (task.taskType) {
@@ -160,6 +165,7 @@ export default function TaskScreen({ route, navigation }) {
       return;
     }
 
+    // Quiz submission
     if (type === "quiz" && Array.isArray(task.questions)) {
       let correct = 0;
       task.questions.forEach((q) => {
@@ -185,10 +191,11 @@ export default function TaskScreen({ route, navigation }) {
     }
   };
 
+  // JSX
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={{ paddingBottom: 80 }} // ensure submit visible
+      contentContainerStyle={{ paddingBottom: 80 }}
     >
       <Text style={styles.title}>{task.title}</Text>
       <Text style={styles.desc}>{task.description}</Text>
@@ -199,7 +206,7 @@ export default function TaskScreen({ route, navigation }) {
         </Text>
       )}
 
-      {/* --- Checklist --- */}
+      {/* Checklist */}
       {task.taskType === "checklist" &&
         Array.isArray(task.items) &&
         task.items.map((item) => (
@@ -221,7 +228,7 @@ export default function TaskScreen({ route, navigation }) {
           </TouchableOpacity>
         ))}
 
-      {/* --- Reading --- */}
+      {/* Reading */}
       {task.taskType === "reading" && (
         <View
           style={[
@@ -238,7 +245,7 @@ export default function TaskScreen({ route, navigation }) {
         </View>
       )}
 
-      {/* --- Scenario --- */}
+      {/* Scenario */}
       {task.taskType === "scenario" && Array.isArray(task.questions) && (
         <View
           style={[
@@ -251,7 +258,6 @@ export default function TaskScreen({ route, navigation }) {
         >
           {task.questions.map((q, idx) => (
             <View key={idx} style={{ marginBottom: 12 }}>
-              {/* Use story as question text */}
               <Text style={[styles.question, { marginBottom: 8 }]}>
                 {task.story}
               </Text>
@@ -294,7 +300,7 @@ export default function TaskScreen({ route, navigation }) {
         </View>
       )}
 
-      {/* --- Quiz --- */}
+      {/* Quiz */}
       {type === "quiz" &&
         Array.isArray(task.questions) &&
         task.questions.map((q, idx) => (
@@ -323,14 +329,14 @@ export default function TaskScreen({ route, navigation }) {
                     answers[q.question] === opt && {
                       backgroundColor: theme.primary,
                       borderColor: theme.primary,
-                    }, 
+                    },
                   ]}
                   onPress={() => setAnswers({ ...answers, [q.question]: opt })}
                 >
                   <Text
                     style={[
                       styles.optionText,
-                      answers[q.question] === opt && styles.selectedOptionText, // scenario text style
+                      answers[q.question] === opt && styles.selectedOptionText,
                     ]}
                   >
                     {opt}
@@ -340,6 +346,7 @@ export default function TaskScreen({ route, navigation }) {
           </View>
         ))}
 
+      {/* Submit button */}
       <TouchableOpacity
         style={[
           styles.button,

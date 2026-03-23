@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect, useContext } from "react";
 import { ThemeContext } from "../helpers/themeContext";
-
 import {
   View,
   Text,
@@ -20,13 +19,14 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import BottomNavigation from "../helpers/bottomNavigation";
 
 import {
-  sendNotification,
+  allowedCountries,
   getCurrentEmergency,
   clearCurrentEmergency,
-  getRandomEmergency,
   getEmergencyInstructions,
-  getEmergencyContacts,
+  simulateEmergencyLogic,
+  getEmergencyContactsSafe,
 } from "../helpers/emergencyHelper";
+
 import { getDeviceCountry } from "../helpers/locationHelper";
 import {
   loadFontSize,
@@ -35,6 +35,7 @@ import {
 } from "../helpers/fontHelper";
 
 export default function EmergencyMode() {
+  // State variables
   const [deviceCountry, setDeviceCountry] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [loadingLocation, setLoadingLocation] = useState(true);
@@ -43,8 +44,6 @@ export default function EmergencyMode() {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContacts, setModalContacts] = useState([]);
   const [fontSize, setFontSize] = useState("medium");
-
-  const allowedCountries = ["Singapore", "England", "Japan"];
 
   const { theme: currentTheme } = useContext(ThemeContext);
 
@@ -58,7 +57,7 @@ export default function EmergencyMode() {
     fetchFontSize();
   }, []);
 
-  // Update current alert periodically
+  // Update current location on focus
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
@@ -84,26 +83,16 @@ export default function EmergencyMode() {
     }, []),
   );
 
+  // Emergency simulation and clearing
   const simulateEmergency = () => {
-    const country = deviceCountry || selectedCountry;
-    if (!country || !allowedCountries.includes(country)) {
-      Alert.alert(
-        "No location selected",
-        "Please enable location or select your country.",
-      );
+    const result = simulateEmergencyLogic(deviceCountry, selectedCountry);
+
+    if (result.error) {
+      Alert.alert("Error", result.error);
       return;
     }
 
-    const emergency = getRandomEmergency();
-    if (!emergency) {
-      clearCurrentEmergency();
-      setCurrentAlert(null);
-      Alert.alert("No emergencies available.");
-      return;
-    }
-
-    sendNotification(emergency);
-    setCurrentAlert(emergency);
+    setCurrentAlert(result.data);
   };
 
   const clearEmergency = () => {
@@ -112,26 +101,16 @@ export default function EmergencyMode() {
     Alert.alert("Emergency cleared", "There are no active emergencies now.");
   };
 
+  // Emergency contacts modal
   const openEmergencyModal = () => {
-    const country = deviceCountry || selectedCountry;
-    if (!country || !allowedCountries.includes(country)) {
-      Alert.alert(
-        "No location selected",
-        "Please enable location or select your country.",
-      );
+    const result = getEmergencyContactsSafe(deviceCountry, selectedCountry);
+
+    if (result.error) {
+      Alert.alert("Error", result.error);
       return;
     }
 
-    const contacts = getEmergencyContacts(country);
-    if (!contacts || contacts.length === 0) {
-      Alert.alert(
-        "No contacts found",
-        `Emergency numbers for ${country} are not available.`,
-      );
-      return;
-    }
-
-    setModalContacts(contacts);
+    setModalContacts(result.data);
     setModalVisible(true);
   };
 
@@ -145,6 +124,7 @@ export default function EmergencyMode() {
   // Font helper function
   const f = (size) => scaleFont(size);
 
+  // JSX Render
   return (
     <View style={styles.screenContainer}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -177,7 +157,7 @@ export default function EmergencyMode() {
           </View>
         )}
 
-        {/* No Emergency Status Card */}
+        {/* No Emergency Card */}
         {!currentAlert && (
           <View style={styles.noAlertBox}>
             <Ionicons
@@ -305,7 +285,7 @@ export default function EmergencyMode() {
       </ScrollView>
 
       {/* Bottom Navigation Bar (sticky) */}
-            <BottomNavigation activeKey="EmergencyMode" />
+      <BottomNavigation activeKey="EmergencyMode" />
     </View>
   );
 }
@@ -316,12 +296,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f6fa",
   },
+
   scrollContainer: {
     padding: 20,
     paddingBottom: 80,
   },
 
-  /* Emergency Alert */
   alertBox: {
     padding: 20,
     marginBottom: 25,
@@ -336,33 +316,37 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     letterSpacing: 1.2,
   },
+
   alertTitle: {
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
     marginBottom: 6,
   },
+
   alertMessage: {
     color: "#fff",
     textAlign: "center",
   },
+
   instructionsBox: {
     marginTop: 15,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: "rgba(255,255,255,0.4)",
   },
+
   instructionsTitle: {
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 8,
   },
+
   instructionItem: {
     color: "#fff",
     marginBottom: 6,
   },
 
-  /* No Emergency Card */
   noAlertBox: {
     backgroundColor: "#ffffff",
     padding: 20,
@@ -371,29 +355,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 2,
   },
+
   noAlertTitle: {
     fontWeight: "bold",
     color: "#2d3436",
     marginTop: 10,
     marginBottom: 4,
   },
+
   noAlertText: {
     color: "#636e72",
     textAlign: "center",
   },
 
-  /* Location */
   subtitle: {
     marginTop: 10,
     marginBottom: 5,
     color: "#2d3436",
     fontWeight: "600",
   },
+
   locationText: {
     fontWeight: "500",
     marginBottom: 10,
     color: "#2d3436",
   },
+
   pickerContainer: {
     borderWidth: 1,
     borderColor: "#dfe6e9",
@@ -403,30 +390,31 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
-  /* Buttons */
   actionButton: {
     paddingVertical: 14,
     borderRadius: 14,
     marginBottom: 12,
     alignItems: "center",
   },
+
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
   },
+
   buttonRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
   },
 
-  /* Modal */
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
+
   modalContent: {
     backgroundColor: "#fff",
     width: "85%",
@@ -434,17 +422,20 @@ const styles = StyleSheet.create({
     padding: 20,
     elevation: 4,
   },
+
   modalTitle: {
     fontWeight: "bold",
     marginBottom: 15,
     color: "#2d3436",
     textAlign: "center",
   },
+
   modalItem: {
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
+
   modalItemText: {
     color: "#2d3436",
   },

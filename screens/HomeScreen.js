@@ -31,6 +31,7 @@ import { loadLanguage } from "../helpers/languageHelper";
 export default function HomeScreen({ navigation }) {
   const { t } = useTranslation();
 
+  // State variables
   const [currentAlert, setCurrentAlert] = useState(getCurrentEmergency());
   const [progress, setProgress] = useState(null);
   const [points, setPoints] = useState(0);
@@ -77,6 +78,7 @@ export default function HomeScreen({ navigation }) {
     }, []),
   );
 
+  // JSX Render
   return (
     <View style={styles.screenContainer}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -137,6 +139,7 @@ export default function HomeScreen({ navigation }) {
 
         {/* Action Grid */}
         <View style={styles.grid}>
+          {/* Preparedness Zone */}
           <TouchableOpacity
             style={[styles.gridItem, { backgroundColor: theme.primary }]}
             onPress={() => navigation.navigate("PreparednessZone")}
@@ -152,6 +155,7 @@ export default function HomeScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
 
+          {/* Resource Hub */}
           <TouchableOpacity
             style={[styles.gridItem, { backgroundColor: theme.primary }]}
             onPress={() => navigation.navigate("ResourceHub")}
@@ -167,6 +171,7 @@ export default function HomeScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
 
+          {/* Emergency Mode */}
           <TouchableOpacity
             style={[styles.gridItem, styles.emergencyGrid]}
             onPress={() => navigation.navigate("EmergencyMode")}
@@ -182,6 +187,7 @@ export default function HomeScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
 
+          {/* Rewarads */}
           <TouchableOpacity
             style={[styles.gridItem, { backgroundColor: theme.primary }]}
             onPress={() => navigation.navigate("Rewards")}
@@ -197,12 +203,14 @@ export default function HomeScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
 
+          {/* Coming Soon */}
           <View style={[styles.gridItem, styles.disabledGrid]}>
             <Text style={[styles.disabledText, { fontSize: scaleFont(14) }]}>
               {t("comingSoon")}
             </Text>
           </View>
 
+          {/* Settings */}
           <TouchableOpacity
             style={[styles.gridItem, styles.settingsGrid]}
             onPress={() => navigation.navigate("Settings")}
@@ -220,23 +228,24 @@ export default function HomeScreen({ navigation }) {
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation Bar (sticky) */}
+      {/* Bottom Navigation Bar */}
       <BottomNavigation activeKey="Home" />
     </View>
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     backgroundColor: "#f5f6fa",
   },
+
   scrollContainer: {
     padding: 20,
     paddingBottom: 80,
   },
 
-  /* Emergency Alert */
   alertSection: {
     minHeight: 120,
     borderRadius: 16,
@@ -246,22 +255,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 3,
   },
+
   activeAlert: {
     backgroundColor: "#fdecea",
     borderWidth: 1,
     borderColor: "#c0392b",
   },
+
   noAlert: {
     backgroundColor: "#dfe6e9",
     borderWidth: 1,
     borderColor: "#b2bec3",
   },
+
   alertText: {
     fontWeight: "600",
     textAlign: "center",
   },
 
-  /* Dashboard */
   dashboard: {
     backgroundColor: "#ffffff",
     borderRadius: 16,
@@ -269,11 +280,13 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     elevation: 3,
   },
+
   sectionTitle: {
     fontWeight: "bold",
     marginBottom: 10,
     color: "#2d3436",
   },
+
   progressBarBg: {
     height: 6,
     backgroundColor: "#b2bec3",
@@ -282,26 +295,29 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 4,
   },
+
   progressBarFill: {
     height: "100%",
     backgroundColor: "#0f8f84",
     borderRadius: 3,
   },
+
   progressText: {
     marginBottom: 5,
     color: "#2d3436",
   },
+
   pointsText: {
     fontWeight: "600",
     color: "#2d3436",
   },
 
-  /* Grid */
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
   },
+
   gridItem: {
     width: "30%",
     aspectRatio: 1,
@@ -312,24 +328,30 @@ const styles = StyleSheet.create({
     padding: 8,
     elevation: 2,
   },
+
   emergencyGrid: {
     backgroundColor: "#c0392b",
   },
+
   gridText: {
     color: "#fff",
     fontWeight: "600",
     textAlign: "center",
   },
+
   settingsGrid: {
     backgroundColor: "#636e72",
   },
+
   disabledGrid: {
     backgroundColor: "#dfe6e9",
     elevation: 0,
   },
+
   gridIcon: {
     marginBottom: 2,
   },
+
   disabledText: {
     color: "#636e72",
     fontWeight: "600",

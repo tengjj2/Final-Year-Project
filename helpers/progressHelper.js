@@ -1,8 +1,11 @@
 // helpers/progressHelper.js
 
-/**
- * Calculate overall progress
- */
+// Get unique disaster categories from tasks and quizzes
+export function getDisasterCategories(tasks, quizzes) {
+  return [...new Set([...tasks, ...quizzes].map((item) => item.category))];
+}
+
+// Calculate overall progress across all tasks and quizzes
 export function calculateProgress({
   tasks,
   quizzes,
@@ -19,9 +22,7 @@ export function calculateProgress({
   return { totalActivities, completedActivities, percentage };
 }
 
-/**
- * Calculate progress for a specific disaster category
- */
+// Calculate progress for a specific disaster category
 export function calculateCategoryProgress({
   category,
   tasks,
@@ -29,10 +30,11 @@ export function calculateCategoryProgress({
   completedTasks,
   completedQuizzes,
 }) {
+  // Fliter tasks and quizzes by category
   const categoryTasks = tasks.filter((t) => t.category === category);
   const categoryQuizzes = quizzes.filter((q) => q.category === category);
 
-  // Use ID comparison
+  // Count completed items by checking ID inclusion
   const completedTaskCount = categoryTasks.filter((task) =>
     completedTasks.includes(task.id),
   ).length;
@@ -43,17 +45,14 @@ export function calculateCategoryProgress({
 
   const total = categoryTasks.length + categoryQuizzes.length;
   const completed = completedTaskCount + completedQuizCount;
+
+  // Calculate percentage safely
   const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
 
   return { category, total, completed, percentage };
 }
 
-/**
- * Initialize collapse state for disaster categories
- * @param {Array} tasks - list of tasks
- * @param {Array} quizzes - list of quizzes
- * @returns {Object} - object mapping category => true
- */
+// Initialise collapse state for each disaster category
 export function initCollapseState(tasks, quizzes) {
   const categories = [
     ...new Set([...tasks, ...quizzes].map((item) => item.category)),
